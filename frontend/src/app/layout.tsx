@@ -1,9 +1,9 @@
-import type { Metadata } from "next";
-import "./globals.css";
+import type { Metadata } from 'next';
+import './globals.css';
 
 export const metadata: Metadata = {
-	title: "LYRIC:IT",
-	description: "Play lyric-based games with your friends!",
+	title: 'LYRIC:IT',
+	description: 'Play lyric-based games with your friends!',
 };
 
 export default function RootLayout({

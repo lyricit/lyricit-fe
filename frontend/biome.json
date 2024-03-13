@@ -17,5 +17,17 @@
 		"lineWidth": 80,
 		"lineEnding": "lf",
 		"ignore": []
+	},
+	"javascript": {
+		"formatter": {
+			"arrowParentheses": "always",
+			"jsxQuoteStyle": "double",
+			"quoteStyle": "single",
+			"semicolons": "always",
+			"trailingComma": "all",
+			"quoteProperties": "asNeeded",
+			"bracketSpacing": true,
+			"bracketSameLine": false
+		}
 	}
 }
