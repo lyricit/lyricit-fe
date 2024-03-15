@@ -1,5 +1,6 @@
 import type { Config } from 'tailwindcss';
 import colors from 'tailwindcss/colors';
+import plugin from 'tailwindcss/plugin';
 
 const config: Config = {
   content: [
@@ -94,12 +95,90 @@ const config: Config = {
       },
       black: '#262626',
       white: '#f6f6f6',
-      primary: '#f266ab',
-      secondary: '#2cd3e1',
-      tertiary: '#ffb84c',
+      primary: 'rgb(var(--color-primary))',
+      secondary: 'rgb(var(--color-secondary))',
+      tertiary: 'rgb(var(--color-tertiary))',
     },
-    extend: {},
+    extend: {
+      fontFamily: {
+        logo: ['var(--font-logo)'],
+        pretendard: ['var(--font-pretendard)'],
+      },
+      textShadow: {
+        logo: {
+          lg: '0px 0px 20px currentColor, 0px 0px 50px currentColor, 0px 0px 100px currentColor, 0px 0px 100px currentColor',
+        },
+      },
+      keyframes: {
+        flicker: {
+          '0%': {
+            'text-shadow': 'none',
+            '-webkit-text-stroke-color':
+              'color-mix(in srgb, currentColor 50%, transparent)',
+          },
+          '2%': {
+            'text-shadow':
+              '0px 0px 20px currentColor, 0px 0px 50px currentColor, 0px 0px 100px currentColor, 0px 0px 100px currentColor',
+            '-webkit-text-stroke-color': 'currentColor',
+          },
+          '4%': {
+            'text-shadow': 'none',
+            '-webkit-text-stroke-color':
+              'color-mix(in srgb, currentColor 50%, transparent)',
+          },
+          '6%': {
+            'text-shadow':
+              '0px 0px 20px currentColor, 0px 0px 50px currentColor, 0px 0px 100px currentColor, 0px 0px 100px currentColor',
+            '-webkit-text-stroke-color': 'currentColor',
+          },
+          '8%': {
+            'text-shadow': 'none',
+            '-webkit-text-stroke-color':
+              'color-mix(in srgb, currentColor 50%, transparent)',
+          },
+          '10%': {
+            'text-shadow':
+              '0px 0px 20px currentColor, 0px 0px 50px currentColor, 0px 0px 100px currentColor, 0px 0px 100px currentColor',
+            '-webkit-text-stroke-color': 'currentColor',
+          },
+          '14%': {
+            'text-shadow': 'none',
+            '-webkit-text-stroke-color':
+              'color-mix(in srgb, currentColor 50%, transparent)',
+          },
+          '20%': {
+            'text-shadow':
+              '0px 0px 20px currentColor, 0px 0px 50px currentColor, 0px 0px 100px currentColor, 0px 0px 100px currentColor',
+            '-webkit-text-stroke-color': 'currentColor',
+          },
+          '88%': {
+            'text-shadow':
+              '0px 0px 20px currentColor, 0px 0px 50px currentColor, 0px 0px 100px currentColor, 0px 0px 100px currentColor',
+            '-webkit-text-stroke-color': 'currentColor',
+          },
+          '100%': {
+            'text-shadow':
+              '0px 0px 20px currentColor, 0px 0px 50px currentColor, 0px 0px 100px currentColor, 0px 0px 100px currentColor',
+            '-webkit-text-stroke-color': 'currentColor',
+          },
+        },
+      },
+      animation: {
+        flickering: 'flicker 8s 1s forwards',
+      },
+    },
   },
-  plugins: [],
+  plugins: [
+    plugin(({ matchUtilities, theme }) => {
+      matchUtilities(
+        {
+          'text-shadow': (value) => ({
+            textShadow: value,
+          }),
+        },
+        { values: theme('textShadow') },
+      );
+    }),
+  ],
 };
 export default config;

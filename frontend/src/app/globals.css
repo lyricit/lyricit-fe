@@ -1,3 +1,40 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  :root {
+    --color-primary: 242 102 171;
+    --color-secondary: 44 211 225;
+    --color-tertiary: 255 184 76;
+  }
+}
+
+@layer utilities {
+  .path-1 {
+    offset-path: polygon(37% 81%, 53% 100%, 100% 81%, 29% 0, 0 38%);
+  }
+
+  .path-2 {
+    offset-path: polygon(70% 39%, 100% 65%, 70% 100%, 0 45%, 31% 0);
+  }
+
+  .path-3 {
+    offset-path: polygon(50% 0%, 0% 50%, 50% 100%, 100% 50%);
+  }
+
+  .text-stroke-pink-5:after {
+    position: absolute;
+    content: attr(stroke-text);
+    left: 0;
+    top: 0;
+    z-index: -1;
+    color: rgb(var(--color-primary));
+    -webkit-text-stroke-width: 5px;
+    -webkit-text-stroke-color: color-mix(
+      in srgb,
+      currentColor 50%,
+      transparent
+    );
+  }
+}
