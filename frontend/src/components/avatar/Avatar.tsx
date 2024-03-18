@@ -4,13 +4,13 @@ import { AvatarFace } from './faces';
 
 const Avatar = ({
   size = 120,
-  headColor = '#ffb84c',
+  skinColor = '#ffb84c',
   decoColor,
   faceType = 'default',
   decoType = 'default',
 }: {
   size?: number;
-  headColor?: string;
+  skinColor?: string;
   decoColor?: string;
   faceType?: keyof FaceType;
   decoType?: keyof DecorationType;
@@ -29,7 +29,7 @@ const Avatar = ({
       <defs id="defs1" />
       <g id="head">
         <circle
-          fill={headColor}
+          fill={skinColor}
           fillOpacity="1"
           stroke="#000000"
           strokeWidth={3.65729}

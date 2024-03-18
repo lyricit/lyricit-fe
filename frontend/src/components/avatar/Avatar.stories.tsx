@@ -6,7 +6,7 @@ export default {
   component: Avatar,
   argTypes: {
     size: { control: 'number' },
-    headColor: { control: 'color' },
+    skinColor: { control: 'color' },
     decoColor: { control: 'color' },
     faceType: {
       control: 'select',
@@ -45,7 +45,7 @@ type Story = StoryObj<typeof Avatar>;
 export const Default: Story = {
   args: {
     size: 120,
-    headColor: '#ffb84c',
+    skinColor: '#ffb84c',
     decoColor: undefined,
     faceType: 'default',
     decoType: 'default',
