@@ -4,6 +4,7 @@ const FaceCat = () => (
     fillOpacity="1"
     stroke="#000000"
     strokeWidth={4.38874}
+    strokeLinejoin="round"
     strokeLinecap="round"
     strokeMiterlimit={10}
     strokeDasharray="none"
