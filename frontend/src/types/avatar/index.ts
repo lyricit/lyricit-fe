@@ -1,30 +1,32 @@
-type DecorationKeys =
-  | 'default'
-  | 'beanie'
-  | 'beanieCat'
-  | 'bob'
-  | 'cap'
-  | 'goggle'
-  | 'mask'
-  | 'mohican'
-  | 'mole';
+export const DecorationKeys = {
+  default: 'default',
+  beanie: 'beanie',
+  beanieCat: 'beanieCat',
+  bob: 'bob',
+  cap: 'cap',
+  goggle: 'goggle',
+  mask: 'mask',
+  mohican: 'mohican',
+  mole: 'mole',
+} as const;
 
-type FaceKeys =
-  | 'default'
-  | 'blank'
-  | 'boo'
-  | 'cat'
-  | 'disappointed'
-  | 'nyah'
-  | 'smirk'
-  | 'surprised'
-  | 'unpleased'
-  | 'w';
+export const FaceKeys = {
+  default: 'default',
+  blank: 'blank',
+  boo: 'boo',
+  cat: 'cat',
+  disappointed: 'disappointed',
+  nyah: 'nyah',
+  smirk: 'smirk',
+  surprised: 'surprised',
+  unpleased: 'unpleased',
+  w: 'w',
+} as const;
 
 export type DecorationType = {
-  [K in DecorationKeys]: JSX.Element;
+  [K in keyof typeof DecorationKeys]: JSX.Element;
 };
 
 export type FaceType = {
-  [K in FaceKeys]: JSX.Element;
+  [K in keyof typeof FaceKeys]: JSX.Element;
 };
