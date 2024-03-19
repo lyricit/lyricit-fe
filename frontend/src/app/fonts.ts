@@ -11,3 +11,9 @@ export const Pretendard = localFont({
   display: 'swap',
   variable: '--font-pretendard',
 });
+
+export const Chab = localFont({
+  src: '../../public/fonts/chab.ttf',
+  display: 'swap',
+  variable: '--font-chab',
+});

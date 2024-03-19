@@ -103,6 +103,7 @@ const config: Config = {
       fontFamily: {
         logo: ['var(--font-logo)'],
         pretendard: ['var(--font-pretendard)'],
+        chab: ['var(--font-chab)'],
       },
       textShadow: {
         logo: {

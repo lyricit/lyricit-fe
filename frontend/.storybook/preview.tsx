@@ -1,5 +1,8 @@
 import type { Preview } from '@storybook/react';
+import React from 'react';
+import { Chab, LogoFont, Pretendard } from '../src/app/fonts';
 import '../src/app/globals.css';
+import { cn } from '../src/utils';
 
 const preview: Preview = {
   parameters: {
@@ -9,6 +12,7 @@ const preview: Preview = {
         date: /Date$/i,
       },
     },
+
     backgrounds: {
       default: 'dark',
       values: [
@@ -23,6 +27,20 @@ const preview: Preview = {
       ],
     },
   },
+  decorators: [
+    (Story) => (
+      <div
+        className={cn(
+          Pretendard.variable,
+          LogoFont.variable,
+          Chab.variable,
+          'font-pretendard',
+        )}
+      >
+        <Story />
+      </div>
+    ),
+  ],
 };
 
 export default preview;
