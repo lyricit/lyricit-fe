@@ -9,8 +9,8 @@ const GeneralContainerVariants = cva(
   {
     variants: {
       color: {
-        white: 'bg-white border-white/80',
-        black: 'bg-black border-black/80',
+        white: 'bg-white border-white/30',
+        black: 'bg-black border-black/30',
       },
     },
     defaultVariants: {
