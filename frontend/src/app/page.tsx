@@ -1,5 +1,8 @@
 import LogoHero from '@/components/LogoHero';
 import Spotlight from '@/components/Spotlight';
+import GeneralContainer from '@/components/common/GeneralContainer';
+import LoginForm from '@/containers/auth/LoginForm';
+import { AvatarProvider } from '@/providers/AvatarProvider';
 import Image from 'next/image';
 
 export default function Home() {
@@ -23,7 +26,9 @@ export default function Home() {
           <LogoHero />
         </div>
         <div className="h-full w-full flex items-center justify-center">
-          {/* TODO: 프로필 설정 및 로그인 박스 */}
+          <AvatarProvider>
+            <LoginForm />
+          </AvatarProvider>
         </div>
       </div>
     </main>
