@@ -1,6 +1,8 @@
 import type { RoomProps } from '@/types/room';
+import { cva } from 'class-variance-authority';
 import { motion } from 'framer-motion';
 import { IoMdLock } from 'react-icons/io';
+
 export default function RoomCard({
   id,
   title,
@@ -23,28 +25,43 @@ export default function RoomCard({
         } `}
       >
         <div className="px-[5px] rounded-[10px] flex-col justify-center items-center gap-2.5 flex">
-          <div className="text-center text-white text-2xl font-medium leading-7">
-            {id}
-          </div>
+          <span className="absolute z-0 text-center text-transparent text-2xl font-medium leading-7 text-stroke-darker">
+            {id.toString().padStart(3, '0')}
+          </span>
+          <span className="text-center z-10 text-white text-2xl font-medium leading-7">
+            {id.toString().padStart(3, '0')}
+          </span>
         </div>
       </div>
       <div className="grow shrink basis-0 self-stretch p-2.5 rounded-[20px] flex-col justify-between items-start inline-flex">
         <div className="self-stretch grow shrink basis-0 px-2.5 justify-start items-center gap-2.5 inline-flex">
-          <div className="grow shrink basis-0 text-neutral-800 text-base font-semibold leading-tight">
+          <span className="grow shrink basis-0 text-neutral-800 text-base font-semibold leading-tight">
             {title}
-          </div>
+          </span>
           <div>{isOpen === false ? <IoMdLock /> : null}</div>
         </div>
-        <div className="self-stretch grow shrink basis-0 px-[5px] py-2.5 justify-between items-center inline-flex">
-          <div className="px-[5px] flex-col justify-center items-center gap-2.5 inline-flex">
-            <div className="text-center text-base font-normal font-chab uppercase tracking-tight">
-              {status}
-            </div>
+        <div className="self-stretch grow shrink basis-0 px-[10px] justify-between items-center inline-flex">
+          <div>
+            {status === 'waiting' ? (
+              <span className="relative z-0 text-white text-center text-base font-normal font-chab uppercase tracking-tight status-text-stroke after:text-stroke-width-5 after:text-emerald-500 after:content-['waiting']">
+                <span className="absolute top-0 left-0 -z-10 text-emerald-500 text-center text-base font-normal font-chab uppercase tracking-tight status-text-stroke after:text-stroke-width-2 after:text-emerald-500 after:content-['waiting']">
+                  {status}
+                </span>
+                {status}
+              </span>
+            ) : (
+              <span className="relative z-0 text-white text-center text-base font-normal font-chab uppercase tracking-tight status-text-stroke after:text-stroke-width-5 after:text-rose-600 after:content-['playing']">
+                <span className="absolute top-0 left-0 -z-10 text-rose-600 text-center text-base font-normal font-chab uppercase tracking-tight status-text-stroke after:text-stroke-width-2 after:text-rose-600 after:content-['playing']">
+                  {status}
+                </span>
+                {status}
+              </span>
+            )}
           </div>
           <div className="px-5 py-1 bg-neutral-300 rounded-[40px] flex-col justify-start items-center inline-flex">
-            <div className="text-center text-neutral-800 text-xs font-semibold uppercase leading-none">
+            <span className="text-center text-neutral-800 text-xs font-semibold uppercase leading-none">
               {current} / {limit}
-            </div>
+            </span>
           </div>
         </div>
       </div>
