@@ -1,6 +1,5 @@
-import LogoHero from '@/components/LogoHero';
-import Spotlight from '@/components/Spotlight';
-import GeneralContainer from '@/components/common/GeneralContainer';
+import Spotlight from '@/components/common/Spotlight';
+import LogoHero from '@/components/logo/LogoHero';
 import LoginForm from '@/containers/auth/LoginForm';
 import { AvatarProvider } from '@/providers/AvatarProvider';
 import Image from 'next/image';
