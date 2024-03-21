@@ -37,4 +37,25 @@
       transparent
     );
   }
+
+  .status-text-stroke:after {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: -1;
+    -webkit-text-stroke-color: currentColor;
+  }
+
+  .text-stroke-width-5 {
+    -webkit-text-stroke-width: 5px;
+  }
+
+  .text-stroke-width-2 {
+    -webkit-text-stroke-width: 2px;
+  }
+
+  .text-stroke-darker {
+    -webkit-text-stroke-width: 3px;
+    -webkit-text-stroke-color: rgba(0, 0, 0, 0.3);
+  }
 }
