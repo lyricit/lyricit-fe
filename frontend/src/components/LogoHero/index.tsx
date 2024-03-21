@@ -22,6 +22,7 @@ const LogoHero = () => {
         width="400"
         height="400"
         alt="Character Image"
+        priority={true}
         className="relative -z-10 mx-auto"
       />
       <div

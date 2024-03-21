@@ -7,12 +7,12 @@ import Image from 'next/image';
 
 export default function Home() {
   return (
-    <main className="relative">
-      <div className="w-screen h-screen absolute inset-0 -z-10 overflow-hidden">
+    <main className="container">
+      <div className="fixed inset-0 -z-10 overflow-hidden">
         <Spotlight variant="blue" path={1} />
         <Spotlight variant="pink" path={2} />
         <Spotlight variant="yellow" path={3} />
-        <div className="w-full h-full bg-[radial-gradient(29.83%_60.95%_at_50%_39.05%,rgba(0,0,0,0.00)_0%,rgba(0,0,0,0.80)_73.64%,rgba(0,0,0,0.80)_100%)]">
+        <div className="absolute w-full h-full bg-[radial-gradient(29.83%_60.95%_at_50%_39.05%,rgba(0,0,0,0.00)_0%,rgba(0,0,0,0.80)_73.64%,rgba(0,0,0,0.80)_100%)]">
           <Image
             src={'/index-background.jpg'}
             alt="background image"
