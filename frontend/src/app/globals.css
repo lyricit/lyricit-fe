@@ -59,7 +59,7 @@
     );
   }
 
-  .status-text-stroke:after {
+  .text-stroke:after {
     position: absolute;
     left: 0;
     top: 0;
@@ -73,6 +73,10 @@
 
   .text-stroke-width-2 {
     -webkit-text-stroke-width: 2px;
+  }
+
+  .text-stroke-black {
+    -webkit-text-stroke-color: rgba(0, 0, 0, 1);
   }
 
   .text-stroke-darker {
