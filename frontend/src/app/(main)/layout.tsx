@@ -4,7 +4,7 @@ export default function DictionaryLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="w-screen h-screen flex-col justify-center items-center inline-flex">
+    <div className="inline-flex h-screen w-screen flex-col items-center justify-center">
       <div>{children}</div>
     </div>
   );
