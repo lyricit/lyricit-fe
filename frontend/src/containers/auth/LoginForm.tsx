@@ -24,7 +24,7 @@ const LoginForm = () => {
         <div className="flex flex-col items-center justify-center gap-5">
           <input
             type="text"
-            className="w-56 py-2 rounded-[10px] ps-3"
+            className="w-56 rounded-[10px] py-2 ps-3"
             placeholder="닉네임을 입력하세요"
           />
           <motion.button
@@ -41,7 +41,7 @@ const LoginForm = () => {
                 'linear-gradient(98deg, #F372B2 0.52%, #2CD3E1 102.44%)',
             }}
             transition={{ duration: 0.5, ease: 'easeInOut' }}
-            className="w-56 py-2 bg-white font-bold rounded-[10px]"
+            className="w-56 rounded-[10px] bg-white py-2 font-bold"
             type="submit"
           >
             입장하기

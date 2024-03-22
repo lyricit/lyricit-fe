@@ -12,9 +12,9 @@ export default function TrackLyric({
   );
 
   return (
-    <div className="w-[510px] h-[381px] px-5 flex-col justify-start items-start gap-2.5 inline-flex">
+    <div className="inline-flex h-[381px] w-[510px] flex-col items-start justify-start gap-2.5 px-5">
       <article
-        className="self-stretch h-[1130px] text-white whitespace-pre-wrap"
+        className="h-[1130px] self-stretch whitespace-pre-wrap text-white"
         // biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
         dangerouslySetInnerHTML={{ __html: processedLyric }}
       />

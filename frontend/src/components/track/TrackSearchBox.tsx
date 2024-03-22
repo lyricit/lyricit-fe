@@ -5,7 +5,7 @@ export default function TrackSearchBox({
 }) {
   return (
     <input
-      className="grow shrink basis-0 h-[46px] px-10 py-[9px] bg-white rounded-[20px] justify-start items-center flex focus:outline-none"
+      className="flex h-[46px] shrink grow basis-0 items-center justify-start rounded-[20px] bg-white px-10 py-[9px] focus:outline-none"
       placeholder={placeholder}
     />
   );

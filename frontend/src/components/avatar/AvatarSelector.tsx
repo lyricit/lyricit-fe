@@ -14,10 +14,10 @@ const AvatarSelector = () => {
     <section className="flex">
       <div className="flex flex-col">
         <div className="flex gap-3">
-          <div className="flex flex-col flex-grow items-center justify-center w-10 gap-2">
+          <div className="flex w-10 flex-grow flex-col items-center justify-center gap-2">
             <motion.button
               type="button"
-              className="text-white text-2xl inline"
+              className="inline text-2xl text-white"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.8 }}
               onClick={() => changeDecoType('prev')}
@@ -26,7 +26,7 @@ const AvatarSelector = () => {
             </motion.button>
             <motion.button
               type="button"
-              className="text-white text-2xl inline"
+              className="inline text-2xl text-white"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.8 }}
               onClick={() => changeFaceType('prev')}
@@ -40,10 +40,10 @@ const AvatarSelector = () => {
             faceType={faceType}
             decoType={decoType}
           />
-          <div className="flex flex-col flex-grow items-center justify-center w-10 gap-2">
+          <div className="flex w-10 flex-grow flex-col items-center justify-center gap-2">
             <motion.button
               type="button"
-              className="text-white text-2xl inline"
+              className="inline text-2xl text-white"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.8 }}
               onClick={() => changeDecoType('next')}
@@ -52,7 +52,7 @@ const AvatarSelector = () => {
             </motion.button>
             <motion.button
               type="button"
-              className="text-white text-2xl inline"
+              className="inline text-2xl text-white"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.8 }}
               onClick={() => changeFaceType('next')}

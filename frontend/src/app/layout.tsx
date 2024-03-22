@@ -15,7 +15,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko" className={cn(LogoFont.variable, Pretendard.variable)}>
-      <body className="font-pretendard select-none">{children}</body>
+      <body className="select-none font-pretendard">{children}</body>
     </html>
   );
 }

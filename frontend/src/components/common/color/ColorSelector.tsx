@@ -28,14 +28,14 @@ const ColorSelector = ({
         <button
           type="button"
           id={id}
-          className="w-8 h-8 cursor-pointer rounded-full border-black/30 border-[3px] me-2"
+          className="me-2 h-8 w-8 cursor-pointer rounded-full border-[3px] border-black/30"
           style={{ backgroundColor: color }}
           onClick={() => {
             toggle(true);
           }}
         />
         <label
-          className="cursor-pointer text-center text-white font-semibold uppercase"
+          className="cursor-pointer text-center font-semibold text-white uppercase"
           htmlFor={id}
         >
           {label}
