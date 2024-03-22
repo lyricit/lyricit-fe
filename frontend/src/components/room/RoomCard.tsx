@@ -1,4 +1,5 @@
 import type { RoomProps } from '@/types/room';
+import { cn } from '@/utils';
 import { cva } from 'class-variance-authority';
 import { motion } from 'framer-motion';
 import { IoMdLock } from 'react-icons/io';
@@ -15,14 +16,16 @@ export default function RoomCard({
     <motion.div
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 1 }}
-      className={`inline-flex h-20 w-[360px] items-start justify-start rounded-[10px] border-2 bg-white${
-        status === 'waiting' ? 'border-emerald-500' : 'border-rose-600'
-      }`}
+      className={cn(
+        'inline-flex h-20 w-[360px] items-start justify-start rounded-[10px] border-2 bg-white',
+        status === 'waiting' ? 'border-emerald-500' : 'border-rose-600',
+      )}
     >
       <div
-        className={`inline-flex w-[75px] flex-col items-center justify-center gap-2.5 self-stretch rounded-l-md${
-          status === 'waiting' ? 'bg-emerald-500' : 'bg-rose-600'
-        }`}
+        className={cn(
+          'inline-flex w-[75px] flex-col items-center justify-center gap-2.5 self-stretch rounded-l-md',
+          status === 'waiting' ? 'bg-emerald-500' : 'bg-rose-600',
+        )}
       >
         <div className="flex flex-col items-center justify-center gap-2.5 rounded-[10px] px-[5px]">
           <span className="absolute z-0 text-center font-medium text-2xl text-stroke-darker text-transparent leading-7">
