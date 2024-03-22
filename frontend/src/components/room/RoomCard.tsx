@@ -46,15 +46,15 @@ export default function RoomCard({
         <div className="inline-flex shrink grow basis-0 items-center justify-between self-stretch px-[10px]">
           <div>
             {status === 'waiting' ? (
-              <span className="status-text-stroke relative z-0 text-center font-chab font-normal text-base text-white uppercase tracking-tight after:text-emerald-500 after:text-stroke-width-5 after:content-['waiting']">
-                <span className="-z-10 status-text-stroke absolute top-0 left-0 text-center font-chab font-normal text-base text-emerald-500 uppercase tracking-tight after:text-emerald-500 after:text-stroke-width-2 after:content-['waiting']">
+              <span className="relative z-0 text-center font-chab font-normal text-base text-stroke text-white uppercase tracking-tight after:text-emerald-500 after:text-stroke-width-5 after:content-['waiting']">
+                <span className="-z-10 absolute top-0 left-0 text-center font-chab font-normal text-base text-emerald-500 text-stroke uppercase tracking-tight after:text-emerald-500 after:text-stroke-width-2 after:content-['waiting']">
                   {status}
                 </span>
                 {status}
               </span>
             ) : (
-              <span className="status-text-stroke relative z-0 text-center font-chab font-normal text-base text-white uppercase tracking-tight after:text-rose-600 after:text-stroke-width-5 after:content-['playing']">
-                <span className="-z-10 status-text-stroke absolute top-0 left-0 text-center font-chab font-normal text-base text-rose-600 uppercase tracking-tight after:text-rose-600 after:text-stroke-width-2 after:content-['playing']">
+              <span className="relative z-0 text-center font-chab font-normal text-base text-stroke text-white uppercase tracking-tight after:text-rose-600 after:text-stroke-width-5 after:content-['playing']">
+                <span className="-z-10 absolute top-0 left-0 text-center font-chab font-normal text-base text-rose-600 text-stroke uppercase tracking-tight after:text-rose-600 after:text-stroke-width-2 after:content-['playing']">
                   {status}
                 </span>
                 {status}
