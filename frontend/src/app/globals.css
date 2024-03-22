@@ -8,6 +8,27 @@
     --color-secondary: 44 211 225;
     --color-tertiary: 255 184 76;
   }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    border-radius: 20px;
+    display: block;
+  }
+
+  ::-webkit-scrollbar-track,
+  ::-webkit-scrollbar-button {
+    display: none;
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 15px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.5);
+  }
 }
 
 @layer utilities {
