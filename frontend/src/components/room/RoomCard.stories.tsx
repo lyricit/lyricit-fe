@@ -7,7 +7,7 @@ export default {
   argTypes: {
     id: { control: 'number' },
     title: { control: 'text' },
-    status: { control: 'select', options: ['waiting', 'playing'] },
+    status: { control: 'select', options: ['waiting', 'playing', 'empty'] },
     isOpen: { control: 'boolean' },
     current: { control: { type: 'number', min: 1, max: 6 } },
     limit: { control: { type: 'number', min: 2, max: 6 } },
@@ -32,6 +32,17 @@ export const Playing: Story = {
     id: 123,
     title: '방 제목',
     status: 'playing',
+    isOpen: true,
+    current: 1,
+    limit: 6,
+  },
+};
+
+export const Empty: Story = {
+  args: {
+    id: 123,
+    title: '방 제목',
+    status: 'empty',
     isOpen: true,
     current: 1,
     limit: 6,
