@@ -1,3 +1,5 @@
+'use client';
+
 import type { RoomProps } from '@/types/room';
 import { cn } from '@/utils';
 import { cva } from 'class-variance-authority';
