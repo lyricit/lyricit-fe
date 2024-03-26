@@ -7,14 +7,8 @@ import { useStompClient } from '@/providers/StompProvider';
 import useStore from '@/stores/useStore';
 import { useUserStore } from '@/stores/user';
 import type { RoomProps } from '@/types/room';
-import {
-  type QueryFilters,
-  useQuery,
-  useQueryClient,
-} from '@tanstack/react-query';
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useEffect, useRef } from 'react';
 
 export type ChatData = {
   nickname: string;
