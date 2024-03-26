@@ -2,13 +2,33 @@
 
 import ColorSelector from '@/components/common/color/ColorSelector';
 import { useAvatarActions, useAvatarStates } from '@/providers/AvatarProvider';
+import useStore from '@/stores/useStore';
+import { useUserStore } from '@/stores/user';
 import { motion } from 'framer-motion';
+import { useEffect } from 'react';
 import Avatar from './Avatar';
-
 const AvatarSelector = () => {
-  const { changeDecoType, changeFaceType, changeSkinColor, changeDecoColor } =
-    useAvatarActions();
+  const {
+    changeDecoType,
+    changeFaceType,
+    setDecoColor,
+    setDecoType,
+    setSkinColor,
+    setFaceType,
+  } = useAvatarActions();
   const { skinColor, decoColor, faceType, decoType } = useAvatarStates();
+
+  const avatar = useStore(useUserStore, (state) => state.avatar);
+  // userStore에 id가 ''이 아니라면 (유저 정보가 있다면) userStore의 avatar를 가져와서 초기값으로 설정
+
+  useEffect(() => {
+    if (avatar && avatar.skinColor !== '') {
+      setSkinColor(avatar.skinColor);
+      setDecoColor(avatar.decoColor);
+      setFaceType(avatar.faceType);
+      setDecoType(avatar.decoType);
+    }
+  }, [avatar, setSkinColor, setDecoColor, setFaceType, setDecoType]);
 
   return (
     <section className="flex">
@@ -65,12 +85,12 @@ const AvatarSelector = () => {
           <ColorSelector
             label="skin"
             color={skinColor}
-            onChange={changeSkinColor}
+            onChange={setSkinColor}
           />
           <ColorSelector
             label="deco"
             color={decoColor}
-            onChange={changeDecoColor}
+            onChange={setDecoColor}
           />
         </div>
       </div>

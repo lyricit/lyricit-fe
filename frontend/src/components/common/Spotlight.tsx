@@ -3,7 +3,6 @@
 import { cn } from '@/utils';
 import { type VariantProps, cva } from 'class-variance-authority';
 import { type HTMLMotionProps, motion } from 'framer-motion';
-import type React from 'react';
 import type { FC } from 'react';
 
 const SpotlightVariants = cva(

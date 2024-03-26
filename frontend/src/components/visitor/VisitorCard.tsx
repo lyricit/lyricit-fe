@@ -1,4 +1,6 @@
-const VisitorCard = ({ items }: { items: string[] }) => {
+import type { UserInfo } from '@/app/(main)/lobby/page';
+
+const VisitorCard = ({ items }: { items?: UserInfo[] }) => {
   return (
     <div className="inline-flex h-[172px] w-[150px] flex-col justify-start gap-2 rounded-[10px] bg-white">
       <div className="inline-flex w-[150px] items-center justify-center gap-2.5 rounded-t-[10px] border-black border-b-2 border-opacity-10 bg-neutral-300 py-[5px]">
@@ -7,13 +9,13 @@ const VisitorCard = ({ items }: { items: string[] }) => {
         </div>
       </div>
       {/* 스크롤 가능하도록 변경*/}
-      <ul className="mr-1 inline-flex flex-col items-start justify-start gap-1 overflow-y-auto px-3">
-        {items.map((item) => (
+      <ul className="mr-1 inline-flex h-full flex-col items-start justify-start gap-1 overflow-y-auto px-3 pb-3">
+        {items?.map((item, index) => (
           <li
-            key={item}
+            key={`${item.nickname}${index}`}
             className="text-center font-semibold text-neutral-800 text-xs leading-none"
           >
-            {item}
+            {item.nickname}
           </li>
         ))}
       </ul>

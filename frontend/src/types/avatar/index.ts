@@ -30,3 +30,10 @@ export type DecorationType = {
 export type FaceType = {
   [K in keyof typeof FaceKeys]: JSX.Element;
 };
+
+export type AvatarType = {
+  faceType: keyof typeof FaceKeys;
+  decoType: keyof typeof DecorationKeys;
+  decoColor: string;
+  skinColor: string;
+};

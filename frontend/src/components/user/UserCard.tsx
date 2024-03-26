@@ -1,4 +1,3 @@
-import type { DecorationType, FaceType } from '@/types/avatar';
 import { Avatar } from '../avatar';
 
 const UserCard = ({
