@@ -2,7 +2,6 @@
 
 import type { RoomProps } from '@/types/room';
 import { cn } from '@/utils';
-import { cva } from 'class-variance-authority';
 import { motion } from 'framer-motion';
 import { IoMdLock } from 'react-icons/io';
 

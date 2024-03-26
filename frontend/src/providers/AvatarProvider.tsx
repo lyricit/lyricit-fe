@@ -11,13 +11,15 @@ const AvatarStatesContext = createContext<AvatarStates | undefined>(undefined);
 export interface AvatarActions {
   changeFaceType: (direction: 'prev' | 'next') => void;
   changeDecoType: (direction: 'prev' | 'next') => void;
-  changeSkinColor: (color: string) => void;
-  changeDecoColor: (color: string) => void;
+  setSkinColor: (color: string) => void;
+  setDecoColor: (color: string) => void;
+  setDecoType: (type: keyof typeof DecorationKeys) => void;
+  setFaceType: (type: keyof typeof FaceKeys) => void;
 }
 
 export interface AvatarStates {
-  skinColor: string | undefined;
-  decoColor: string | undefined;
+  skinColor: string;
+  decoColor: string;
   faceType: keyof typeof FaceKeys;
   decoType: keyof typeof DecorationKeys;
 }
@@ -26,8 +28,8 @@ export const AvatarProvider = ({ children }: { children: React.ReactNode }) => {
   const faceTypes = useMemo(() => Object.values(FaceKeys), []);
   const decorationTypes = useMemo(() => Object.values(DecorationKeys), []);
 
-  const [skinColor, setSkinColor] = useState<string | undefined>('#ffb84c');
-  const [decoColor, setDecoColor] = useState<string | undefined>('#f266ab');
+  const [skinColor, setSkinColor] = useState<string>('#ffb84c');
+  const [decoColor, setDecoColor] = useState<string>('#f266ab');
   const [faceType, setFaceType] = useState<keyof typeof FaceKeys>('default');
   const [decoType, setDecoType] =
     useState<keyof typeof DecorationKeys>('default');
@@ -66,12 +68,10 @@ export const AvatarProvider = ({ children }: { children: React.ReactNode }) => {
         }
         setDecoType(decorationTypes[nextIndex]);
       },
-      changeSkinColor: (color: string) => {
-        setSkinColor(color);
-      },
-      changeDecoColor: (color: string) => {
-        setDecoColor(color);
-      },
+      setSkinColor,
+      setDecoColor,
+      setDecoType,
+      setFaceType,
     }),
     [decoType, faceType, decorationTypes, faceTypes],
   );
