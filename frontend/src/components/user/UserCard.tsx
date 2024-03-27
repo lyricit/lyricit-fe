@@ -1,9 +1,12 @@
+import type { AvatarType } from '@/types/avatar';
 import { Avatar } from '../avatar';
 
 const UserCard = ({
   nickname,
+  avatar,
 }: {
-  nickname: string;
+  nickname?: string;
+  avatar?: AvatarType;
 }) => {
   return (
     <section className="wrap inline-flex flex-col items-center justify-center rounded-[10px] bg-white">
@@ -12,7 +15,12 @@ const UserCard = ({
           내 정보
         </span>
       </div>
-      <Avatar />
+      <Avatar
+        skinColor={avatar?.skinColor}
+        decoColor={avatar?.decoColor}
+        faceType={avatar?.faceType}
+        decoType={avatar?.decoType}
+      />
       <div className="h-[26px] w-[150px] items-center justify-center overflow-hidden text-ellipsis whitespace-nowrap rounded-b-lg border-opacity-10 bg-amber-300 text-center">
         <span className="font-semibold text-sm leading-none">{nickname}</span>
       </div>

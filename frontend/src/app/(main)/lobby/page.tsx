@@ -215,7 +215,7 @@ const Page = () => {
       <div className="inline-flex h-full flex-col items-center justify-start gap-2.5">
         <section className="inline-flex items-start justify-center gap-5">
           <VisitorCard items={users} />
-          <UserCard nickname="일이삼사오육칠팔구십" />
+          <UserCard avatar={userStore?.avatar} nickname={userStore?.nickname} />
         </section>
         {/* 채팅 컴포넌트 */}
         <section className="inline-flex h-[337px] w-[320px] flex-col items-center justify-start overflow-clip rounded-[10px] bg-white pb-2.5">
