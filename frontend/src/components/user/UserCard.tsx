@@ -22,7 +22,9 @@ const UserCard = ({
         decoType={avatar?.decoType}
       />
       <div className="h-[26px] w-[150px] items-center justify-center overflow-hidden text-ellipsis whitespace-nowrap rounded-b-lg border-opacity-10 bg-amber-300 text-center">
-        <span className="font-semibold text-sm leading-none">{nickname}</span>
+        <span className="px-2 font-semibold text-sm leading-none">
+          {nickname}
+        </span>
       </div>
     </section>
   );
