@@ -8,23 +8,27 @@ import { useUserActions, useUserStore } from '@/stores/user';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
+import { z } from 'zod';
 
-interface LoginUser {
+type LoginUser = z.infer<typeof UserNickname> & {
   memberId: string;
-  nickname: string;
   skinColor: string;
   decoColor: string;
   faceType: string;
   decoType: string;
-}
+};
 
-interface LoginResponse {
+type LoginResponse = {
   memberId: string;
-}
+};
+
+const UserNickname = z.object({
+  nickname: z.string().max(10, '닉네임은 최대 10글자까지 가능해요.'),
+});
 
 const LoginForm = () => {
   const router = useRouter();
-  const { skinColor, decoColor, faceType, decoType } = useAvatarStates();
+  const avatar = useAvatarStates();
   const userAction = useUserActions;
   const userStore = useStore(useUserStore, (state) => state);
   const [nickname, setNickname] = useState<string | undefined>(undefined);
@@ -34,29 +38,28 @@ const LoginForm = () => {
     if (userStore?.nickname) {
       setNickname(userStore.nickname);
     }
-  });
+  }, [userStore?.nickname]);
 
   const handleSubmit = async () => {
-    if (!userAction || !userStore) return;
+    if (!userAction || !userStore || !nicknameRef.current) return;
 
-    console.log('handle submit');
+    const nickname = nicknameRef.current.value.trim();
 
-    const avatar = {
-      skinColor,
-      decoColor,
-      faceType,
-      decoType,
-    };
+    const { success } = UserNickname.safeParse({
+      nickname,
+    });
+
+    if (!success) {
+      alert('닉네임은 최대 10글자까지 가능해요.');
+      return;
+    }
 
     userAction.setAvatar(avatar);
-
-    if (nicknameRef.current?.value) {
-      userAction.setNickname(nicknameRef.current.value);
-    }
+    userAction.setNickname(nickname);
 
     const user: LoginUser = {
       memberId: userStore.id,
-      nickname: nicknameRef.current?.value || '알수없는닉네임',
+      nickname,
       ...avatar,
     };
 
