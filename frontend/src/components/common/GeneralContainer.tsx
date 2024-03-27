@@ -5,7 +5,7 @@ import { type VariantProps, cva } from 'class-variance-authority';
 import type { FC, HTMLProps } from 'react';
 
 const GeneralContainerVariants = cva(
-  'flex bg-opacity-30 border-2 backdrop-blur-[20px] rounded-3xl flex-grow',
+  'relative flex bg-opacity-30 border-2 before:absolute before:top-0 before:left-0 before:w-full before:h-full before:-z-[1] before:backdrop-blur-[20px] rounded-3xl flex-grow',
   {
     variants: {
       color: {

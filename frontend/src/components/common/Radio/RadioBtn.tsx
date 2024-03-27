@@ -1,3 +1,5 @@
+'use client';
+
 import type { RadioButtonsProps } from '@/types/radio/index';
 
 const RadioBtn: React.FC<RadioButtonsProps> = ({
@@ -7,13 +9,13 @@ const RadioBtn: React.FC<RadioButtonsProps> = ({
   onChange,
 }) => {
   return (
-    <div className="flex grow items-center justify-between">
+    <ul className="flex grow items-center justify-between">
       {options.map((option) => (
-        <div className="flex border-1 bg-color-black">
-          <label
-            key={option.value}
-            className="inline-flex items-center space-x-2"
-          >
+        <li
+          key={`${option.label}-${option.value}`}
+          className="flex border-1 bg-color-black"
+        >
+          <label className="inline-flex items-center space-x-2">
             <input
               type="radio"
               name={name}
@@ -24,9 +26,9 @@ const RadioBtn: React.FC<RadioButtonsProps> = ({
             />
             <span className="text-xs">{option.label}</span>
           </label>
-        </div>
+        </li>
       ))}
-    </div>
+    </ul>
   );
 };
 
