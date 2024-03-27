@@ -9,11 +9,11 @@ const VisitorCard = ({ items }: { items?: UserInfo[] }) => {
         </div>
       </div>
       {/* 스크롤 가능하도록 변경*/}
-      <ul className="mr-1 inline-flex h-full flex-col items-start justify-start gap-1 overflow-y-auto px-3 pb-3">
+      <ul className="flex h-full flex-col gap-1 overflow-y-auto px-3 pb-3">
         {items?.map((item, index) => (
           <li
             key={`${item.nickname}${index}`}
-            className="text-center font-semibold text-neutral-800 text-xs leading-none"
+            className="overflow-x-hidden text-ellipsis whitespace-nowrap font-semibold text-neutral-800 text-xs"
           >
             {item.nickname}
           </li>
