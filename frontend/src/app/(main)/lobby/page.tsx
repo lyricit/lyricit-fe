@@ -3,12 +3,13 @@
 import RoomCardList from '@/components/room/RoomCardList';
 import UserCard from '@/components/user/UserCard';
 import VisitorCard from '@/components/visitor/VisitorCard';
+import RoomCreateModal from '@/containers/modal/RoomCreateModal';
 import { useStompClient } from '@/providers/StompProvider';
 import useStore from '@/stores/useStore';
 import { useUserStore } from '@/stores/user';
 import type { RoomProps } from '@/types/room';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export type ChatData = {
   nickname: string;
@@ -57,6 +58,7 @@ const getRoomList: () => RoomProps[] = () => [
 ];
 
 const Page = () => {
+  const [createRoom, toggleCreateRoom] = useState(false);
   const userStore = useStore(useUserStore, (state) => state);
   const { client } = useStompClient();
   const chatRef = useRef<HTMLDivElement>(null);
@@ -167,6 +169,8 @@ const Page = () => {
   //   },
   // );
 
+  const clickCreateRoom = () => toggleCreateRoom(!createRoom);
+
   const handleSubmit = (event: React.MouseEvent) => {
     event.preventDefault();
     if (!userStore || !client.connected) return;
@@ -205,6 +209,7 @@ const Page = () => {
           </div>
           <button
             type="button"
+            onClick={clickCreateRoom}
             className="rounded-[10px] border-2 border-black border-opacity-20 bg-neutral-300 px-6 py-3 font-semibold leading-tight"
           >
             방 만들기
@@ -248,6 +253,7 @@ const Page = () => {
           </form>
         </section>
       </div>
+      {createRoom && <RoomCreateModal onClick={clickCreateRoom} />}
     </div>
   );
 };
