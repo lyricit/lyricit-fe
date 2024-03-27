@@ -23,7 +23,7 @@ const RoomHeader = ({
         </div>
       </div>
       <div className="inline-flex h-[31px] shrink grow basis-0 flex-col items-center justify-center gap-2.5">
-        <div className="inline-flex h-[31px] w-64 items-center justify-center gap-2.5 rounded-[10px] px-5 py-[5px]">
+        <div className="inline-flex h-[31px] items-center justify-center gap-2.5 rounded-[10px] px-5 py-[5px]">
           <div className="flex items-center justify-center gap-2.5">
             <div className="flex items-center justify-center" />
           </div>
