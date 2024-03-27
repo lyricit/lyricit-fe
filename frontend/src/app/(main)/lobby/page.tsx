@@ -22,41 +22,6 @@ export type UserInfo = {
   nickname: string;
 };
 
-const getRoomList: () => RoomProps[] = () => [
-  {
-    id: 1,
-    title: '방 제목 1',
-    status: 'waiting',
-    isOpen: true,
-    current: 1,
-    limit: 4,
-  },
-  {
-    id: 2,
-    title: '방 제목 2',
-    status: 'waiting',
-    isOpen: true,
-    current: 2,
-    limit: 4,
-  },
-  {
-    id: 3,
-    title: '방 제목 3',
-    status: 'waiting',
-    isOpen: true,
-    current: 3,
-    limit: 4,
-  },
-  {
-    id: 4,
-    title: '방 제목 4',
-    status: 'waiting',
-    isOpen: true,
-    current: 4,
-    limit: 4,
-  },
-];
-
 const Page = () => {
   const [createRoom, toggleCreateRoom] = useState(false);
   const userStore = useStore(useUserStore, (state) => state);
@@ -77,6 +42,13 @@ const Page = () => {
     queryFn: () =>
       queryClient.getQueryData<UserInfo[]>(['/sub/lounge', 'USER_STATUS']) ||
       [],
+    enabled: !!client,
+  });
+
+  const { data: rooms } = useQuery<RoomProps[]>({
+    queryKey: ['/sub/lounge', 'ROOM'],
+    queryFn: () =>
+      queryClient.getQueryData<RoomProps[]>(['/sub/lounge', 'ROOM']) || [],
     enabled: !!client,
   });
 
@@ -105,13 +77,45 @@ const Page = () => {
       );
     };
 
+    const fetchRooms = async () => {
+      const response = await fetch('https://api-dev.lyricit.site/v1/rooms');
+      const data = await response.json();
+
+      const mappedData: RoomProps[] = data.map(
+        (room: {
+          roomNumber: string;
+          name: string;
+          isPlaying: boolean;
+          isPublic: boolean;
+          playerCount: number;
+          playerLimit: number;
+        }): RoomProps => {
+          return {
+            id: Number.parseInt(room.roomNumber),
+            title: room.name,
+            status: room.isPlaying ? 'playing' : 'waiting',
+            isOpen: room.isPublic,
+            current: room.playerCount as 1 | 2 | 3 | 4 | 5 | 6,
+            limit: room.playerLimit as 2 | 3 | 4 | 5 | 6,
+          };
+        },
+      );
+
+      queryClient.setQueryData<RoomProps[]>(['/sub/lounge', 'ROOM'], () =>
+        mappedData.sort((a, b) => (a.id ?? 0) - (b.id ?? 0)),
+      );
+    };
+
     fetchUsers();
+    fetchRooms();
 
     const channel = '/sub/lounge';
     const sub = client.subscribe(channel, (event) => {
       const data = JSON.parse(event.body);
       const chatQueryKey = [channel, 'LOUNGE_MESSAGE'];
       const userEnterQueryKey = [channel, 'USER_STATUS'];
+      const roomQueryKey = [channel, 'ROOM'];
+
       switch (data.type) {
         case 'LOUNGE_MESSAGE':
           queryClient.setQueryData<ChatData[]>(chatQueryKey, (previousData) => {
@@ -134,6 +138,33 @@ const Page = () => {
             (previousData) => {
               return (previousData ?? []).filter(
                 (user) => user.memberId !== data.data.memberId,
+              );
+            },
+          );
+          break;
+        case 'ROOM_CREATED':
+          queryClient.setQueryData<RoomProps[]>(
+            roomQueryKey,
+            (previousData) => {
+              const prev = previousData || [];
+              const next: RoomProps = {
+                id: Number.parseInt(data.data.roomNumber),
+                title: data.data.name,
+                status: data.data.isPlaying ? 'playing' : 'waiting',
+                isOpen: data.data.isPublic,
+                current: data.data.playerCount,
+                limit: data.data.playerLimit,
+              };
+              return [...prev, next];
+            },
+          );
+          break;
+        case 'ROOM_DELETED':
+          queryClient.setQueryData<RoomProps[]>(
+            roomQueryKey,
+            (previousData) => {
+              return (previousData ?? []).filter(
+                (room) => room.id !== Number.parseInt(data.data),
               );
             },
           );
@@ -215,7 +246,7 @@ const Page = () => {
             방 만들기
           </button>
         </div>
-        <RoomCardList items={getRoomList()} />
+        <RoomCardList items={rooms} />
       </div>
       <div className="inline-flex h-full flex-col items-center justify-start gap-2.5">
         <section className="inline-flex items-start justify-center gap-5">

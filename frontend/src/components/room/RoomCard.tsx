@@ -26,7 +26,7 @@ export default function RoomCard({
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 1 }}
           className={cn(
-            'inline-flex h-20 w-[360px] items-start justify-start rounded-[10px] border-2 bg-white',
+            'inline-flex h-20 w-[360px] cursor-pointer items-start justify-start rounded-[10px] border-2 bg-white',
             status === 'waiting' ? 'border-emerald-500' : 'border-rose-600',
           )}
         >
@@ -38,10 +38,10 @@ export default function RoomCard({
           >
             <div className="flex flex-col items-center justify-center gap-2.5 rounded-[10px] px-[5px]">
               <span className="absolute z-0 text-center font-medium text-2xl text-stroke-darker text-transparent leading-7">
-                {id.toString().padStart(3, '0')}
+                {id?.toString().padStart(3, '0')}
               </span>
               <span className="z-10 text-center font-medium text-2xl text-white leading-7">
-                {id.toString().padStart(3, '0')}
+                {id?.toString().padStart(3, '0')}
               </span>
             </div>
           </div>
