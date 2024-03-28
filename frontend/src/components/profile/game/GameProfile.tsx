@@ -7,7 +7,7 @@ const GameProfile = ({
   score,
 }: { nickname: string; score: number }) => {
   return (
-    <div className="inline-flex h-[130px] items-center justify-center rounded-[10px] border-2 border-black pr-2">
+    <div className="inline-flex h-[130px] items-center justify-center rounded-[10px] border-2 border-black bg-white pr-2">
       <div>
         <Avatar />
       </div>
