@@ -3,6 +3,7 @@
 import type { RoomProps } from '@/types/room';
 import { cn } from '@/utils';
 import { motion } from 'framer-motion';
+import type { MouseEventHandler } from 'react';
 import { IoMdLock } from 'react-icons/io';
 
 export default function RoomCard({
@@ -12,10 +13,9 @@ export default function RoomCard({
   isOpen,
   current,
   limit,
-}: RoomProps) {
+  onClick,
+}: RoomProps & { onClick?: MouseEventHandler }) {
   return (
-    // empty 인 경우 id, title, status, isOpen, current, limit 모두 빈 값으로 렌더링
-
     <div>
       {status === 'empty' ? (
         <div className="inline-flex h-20 w-[360px] items-start justify-start overflow-clip rounded-[10px] border-2 border-neutral-200 bg-white">
@@ -29,6 +29,7 @@ export default function RoomCard({
             'inline-flex h-20 w-[360px] cursor-pointer items-start justify-start rounded-[10px] border-2 bg-white',
             status === 'waiting' ? 'border-emerald-500' : 'border-rose-600',
           )}
+          onClick={onClick}
         >
           <div
             className={cn(
