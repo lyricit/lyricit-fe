@@ -17,3 +17,9 @@ export const Chab = localFont({
   display: 'swap',
   variable: '--font-chab',
 });
+
+export const KotraHope = localFont({
+  src: '../../public/fonts/KotraHope.ttf',
+  display: 'swap',
+  variable: '--font-kotra',
+});
