@@ -11,7 +11,17 @@ export default {
   },
   args: {
     isMaster: false,
-    isReady: false,
+    info: {
+      member: {
+        memberId: '',
+        nickname: 'nickname',
+        faceType: 'default',
+        decoType: 'default',
+        decoColor: '#2f3d57',
+        skinColor: '#ff9f00',
+      },
+      isReady: false,
+    },
   },
 } as Meta;
 
@@ -20,20 +30,50 @@ type Story = StoryObj<typeof RoomProfile>;
 export const Default: Story = {
   args: {
     isMaster: false,
-    isReady: false,
+    info: {
+      member: {
+        memberId: '',
+        nickname: 'nickname',
+        faceType: 'default',
+        decoType: 'default',
+        decoColor: '#2f3d57',
+        skinColor: '#ff9f00',
+      },
+      isReady: false,
+    },
   },
 };
 
 export const Ready: Story = {
   args: {
     isMaster: false,
-    isReady: true,
+    info: {
+      member: {
+        memberId: '',
+        nickname: 'nickname',
+        faceType: 'default',
+        decoType: 'default',
+        decoColor: '#2f3d57',
+        skinColor: '#ff9f00',
+      },
+      isReady: true,
+    },
   },
 };
 
 export const Master: Story = {
   args: {
     isMaster: true,
-    isReady: true,
+    info: {
+      member: {
+        memberId: '',
+        nickname: 'nickname',
+        faceType: 'default',
+        decoType: 'default',
+        decoColor: '#2f3d57',
+        skinColor: '#ff9f00',
+      },
+      isReady: false,
+    },
   },
 };
