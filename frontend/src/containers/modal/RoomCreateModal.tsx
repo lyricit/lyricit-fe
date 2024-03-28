@@ -1,8 +1,10 @@
 'use client';
 
 import RadioBtn from '@/components/common/Radio/RadioBtn';
+import { useRoomActions } from '@/stores/room';
 import { useUserStore } from '@/stores/user';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
 import type React from 'react';
 import type { MouseEventHandler } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -54,14 +56,14 @@ const timeOptions = [
 
 const RoomCreateModal = ({ onClick }: { onClick: MouseEventHandler }) => {
   const id = useUserStore((state) => state.id);
+  const { setPassword } = useRoomActions;
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
 
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log(values);
-
     const result = await fetch('https://api-dev.lyricit.site/v1/rooms', {
       method: 'POST',
       headers: {
@@ -71,7 +73,8 @@ const RoomCreateModal = ({ onClick }: { onClick: MouseEventHandler }) => {
       body: JSON.stringify(values),
     }).then((res) => res.json());
 
-    console.log(result);
+    setPassword(values.password || '');
+    router.push(`room/${result}`);
   };
 
   return (

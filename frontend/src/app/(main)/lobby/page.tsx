@@ -5,10 +5,12 @@ import UserCard from '@/components/user/UserCard';
 import VisitorCard from '@/components/visitor/VisitorCard';
 import RoomCreateModal from '@/containers/modal/RoomCreateModal';
 import { useStompClient } from '@/providers/StompProvider';
+import { useRoomActions } from '@/stores/room';
 import useStore from '@/stores/useStore';
 import { useUserStore } from '@/stores/user';
 import type { RoomProps } from '@/types/room';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
 export type ChatData = {
@@ -22,6 +24,15 @@ export type UserInfo = {
   nickname: string;
 };
 
+export type RoomInfoType = {
+  roomNumber: string;
+  name: string;
+  isPlaying: boolean;
+  isPublic: boolean;
+  playerCount: number;
+  playerLimit: number;
+};
+
 const Page = () => {
   const [createRoom, toggleCreateRoom] = useState(false);
   const userStore = useStore(useUserStore, (state) => state);
@@ -29,6 +40,8 @@ const Page = () => {
   const chatRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const queryClient = useQueryClient();
+  const router = useRouter();
+
   const { data: chats } = useQuery<ChatData[]>({
     queryKey: ['/sub/lounge', 'LOUNGE_MESSAGE'],
     queryFn: () =>
@@ -115,7 +128,6 @@ const Page = () => {
       const chatQueryKey = [channel, 'LOUNGE_MESSAGE'];
       const userEnterQueryKey = [channel, 'USER_STATUS'];
       const roomQueryKey = [channel, 'ROOM'];
-
       switch (data.type) {
         case 'LOUNGE_MESSAGE':
           queryClient.setQueryData<ChatData[]>(chatQueryKey, (previousData) => {
@@ -169,6 +181,23 @@ const Page = () => {
             },
           );
           break;
+        case 'ROOM_UPDATED':
+          queryClient.setQueryData<RoomProps[]>(
+            roomQueryKey,
+            (previousData) => {
+              const prev = previousData || [];
+              const next: RoomProps = {
+                id: Number.parseInt(data.data.roomNumber),
+                title: data.data.name,
+                status: data.data.isPlaying ? 'playing' : 'waiting',
+                isOpen: data.data.isPublic,
+                current: data.data.playerCount,
+                limit: data.data.playerLimit,
+              };
+              return prev.map((room) => (room.id === next.id ? next : room));
+            },
+          );
+          break;
       }
     });
 
@@ -201,6 +230,34 @@ const Page = () => {
   // );
 
   const clickCreateRoom = () => toggleCreateRoom(!createRoom);
+
+  const handleEnterRoom = async (id: number) => {
+    if (!userStore) {
+      return;
+    }
+    const roomInfo: RoomInfoType = await fetch(
+      `https://api-dev.lyricit.site/v1/rooms/${id}`,
+    ).then((res) => res.json());
+
+    console.log(roomInfo);
+
+    if (!roomInfo) {
+      alert('방 정보를 불러오는 데 실패했습니다.');
+      return;
+    }
+
+    if (roomInfo.isPlaying) {
+      alert('이미 시작된 게임입니다.');
+      return;
+    }
+
+    if (roomInfo.playerLimit === roomInfo.playerCount) {
+      alert('방이 꽉 찼습니다.');
+      return;
+    }
+
+    router.push(`/room/${id}`);
+  };
 
   const handleSubmit = (event: React.MouseEvent) => {
     event.preventDefault();
@@ -246,7 +303,7 @@ const Page = () => {
             방 만들기
           </button>
         </div>
-        <RoomCardList items={rooms} />
+        <RoomCardList items={rooms} onClick={handleEnterRoom} />
       </div>
       <div className="inline-flex h-full flex-col items-center justify-start gap-2.5">
         <section className="inline-flex items-start justify-center gap-5">

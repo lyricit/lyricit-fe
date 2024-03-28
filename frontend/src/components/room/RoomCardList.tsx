@@ -1,9 +1,13 @@
 'use client';
 
 import type { RoomProps } from '@/types/room';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import RoomCard from './RoomCard';
-export default function RoomCardList({ items }: { items?: RoomProps[] }) {
+
+export default function RoomCardList({
+  items,
+  onClick,
+}: { items?: RoomProps[]; onClick: (id: number) => void }) {
   const roomList: RoomProps[] = useMemo(() => {
     if (!items)
       return Array.from({ length: 8 }).map(() => ({
@@ -44,6 +48,7 @@ export default function RoomCardList({ items }: { items?: RoomProps[] }) {
               isOpen={isOpen}
               current={current}
               limit={limit}
+              onClick={() => onClick(id as number)}
             />
           </div>
         ),

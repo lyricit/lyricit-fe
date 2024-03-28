@@ -3,7 +3,7 @@ import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
-type States = {
+export type UserState = {
   id: string;
   nickname: string;
   avatar: AvatarType;
@@ -15,7 +15,7 @@ type Actions = {
   setId: (id: string) => void;
 };
 
-const initialState: States = {
+const initialState: UserState = {
   id: '',
   nickname: '',
   avatar: {
@@ -26,7 +26,7 @@ const initialState: States = {
   },
 };
 
-export const useUserStore = create<States>()(
+export const useUserStore = create<UserState>()(
   persist(
     immer(() => initialState),
     {
