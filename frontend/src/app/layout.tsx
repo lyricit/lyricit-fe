@@ -1,6 +1,6 @@
 import { cn } from '@/utils';
 import type { Metadata } from 'next';
-import { Chab, LogoFont, Pretendard } from './fonts';
+import { Chab, KotraHope, LogoFont, Pretendard } from './fonts';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -16,7 +16,12 @@ export default function RootLayout({
   return (
     <html
       lang="ko"
-      className={cn(LogoFont.variable, Pretendard.variable, Chab.variable)}
+      className={cn(
+        LogoFont.variable,
+        Pretendard.variable,
+        Chab.variable,
+        KotraHope.variable,
+      )}
     >
       <body className="select-none font-pretendard">{children}</body>
     </html>

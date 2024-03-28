@@ -94,6 +94,19 @@ const config: Config = {
         '900': '#990248',
         '950': '#570022',
       },
+      violet: {
+        '50': '#fbf6fe',
+        '100': '#f5e9fe',
+        '200': '#eed7fd',
+        '300': '#e0b8fa',
+        '400': '#cd8bf5',
+        '500': '#b95eee',
+        '600': '#a53de0',
+        '700': '#8f2cc4',
+        '800': '#7829a0',
+        '900': '#6b258c',
+        '950': '#440c5f',
+      },
       black: '#262626',
       white: '#f6f6f6',
       primary: 'rgb(var(--color-primary))',
@@ -105,6 +118,7 @@ const config: Config = {
         logo: ['var(--font-logo)'],
         pretendard: ['var(--font-pretendard)'],
         chab: ['var(--font-chab)'],
+        kotra: ['var(--font-kotra)'],
       },
       textShadow: {
         logo: {
@@ -164,9 +178,15 @@ const config: Config = {
             '-webkit-text-stroke-color': 'currentColor',
           },
         },
+        blink: {
+          '50%': {
+            opacity: '0',
+          },
+        },
       },
       animation: {
         flickering: 'flicker 8s 1s forwards',
+        blinking: 'blink 1.5s step-end infinite',
       },
     },
   },

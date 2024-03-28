@@ -70,16 +70,28 @@
     -webkit-text-stroke-color: currentColor;
   }
 
-  .text-stroke-width-5 {
+  .stroke-width-5 {
     -webkit-text-stroke-width: 5px;
   }
 
-  .text-stroke-width-2 {
+  .stroke-width-2 {
     -webkit-text-stroke-width: 2px;
   }
 
   .text-stroke-black {
     -webkit-text-stroke-color: rgba(0, 0, 0, 1);
+  }
+
+  .text-stroke-white {
+    -webkit-text-stroke-color: rgba(255, 255, 255, 1);
+  }
+
+  .text-stroke-yellow {
+    -webkit-text-stroke-color: rgba(239, 123, 7, 1);
+  }
+
+  .text-stroke-violet {
+    -webkit-text-stroke-color: rgba(106, 44, 136, 1);
   }
 
   .text-stroke-darker {
