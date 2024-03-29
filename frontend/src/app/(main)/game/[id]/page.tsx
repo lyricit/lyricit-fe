@@ -1,7 +1,80 @@
 import GameProgressBar from '@/components/game/GameProgressBar';
+import GameScore from '@/components/game/GameScore';
 import GameProfile from '@/components/profile/game/GameProfile';
-import Image from 'next/image';
+import type { AvatarType } from '@/types/avatar';
 import { IoMdStopwatch } from 'react-icons/io';
+
+const dummy = [
+  {
+    id: '412b439f-5a68-5d83-9f48-a4fb8a2f51eb',
+    nickname: '가나다라마바사아자차',
+    score: 16200,
+    avatar: {
+      faceType: 'default',
+      decoType: 'cap',
+      skinColor: '#ffe6f0',
+      decoColor: '#ff4d6d',
+    },
+  },
+  {
+    id: '281fa989-d2af-5108-b3c9-64135a03a37f',
+    nickname: '가나다라마바사아자차',
+    score: 16200,
+    avatar: {
+      faceType: 'default',
+      decoType: 'goggle',
+      skinColor: '#aab675',
+      decoColor: '#b317bb',
+    },
+  },
+  {
+    id: '7fa742c2-dc0a-563e-9036-c1f06c9a1a20',
+    nickname: '가나다라마바사아자차',
+    score: 16200,
+    avatar: {
+      faceType: 'default',
+      decoType: 'mohican',
+      skinColor: '#fcffa1',
+      decoColor: '#099ec8',
+    },
+  },
+  {
+    id: 'f777d354-b934-52c5-86d8-db06e7e05cdb',
+    nickname: '가나다라마바사아자차',
+    score: 16200,
+    avatar: {
+      faceType: 'default',
+      decoType: 'cap',
+      skinColor: '#ffe6f0',
+      decoColor: '#ff4d6d',
+    },
+  },
+  {
+    id: 'a4132dae-ff60-5495-9290-bbe291b80847',
+    nickname: '가나다라마바사아자차',
+    score: 16200,
+    avatar: {
+      faceType: 'default',
+      decoType: 'goggle',
+      skinColor: '#aab675',
+      decoColor: '#b317bb',
+    },
+  },
+  {
+    id: '01dec175-18cd-5fb1-a67f-ed7b65ae222c',
+    nickname: '가나다라마바사아자차',
+    score: 16200,
+    avatar: {
+      faceType: 'default',
+      decoType: 'mohican',
+      skinColor: '#fcffa1',
+      decoColor: '#099ec8',
+    },
+  },
+];
+
+// 위의 dummy를 3개씩 2개의 배열로 나눈다
+const profiles = [dummy.slice(0, 3), dummy.slice(3, 6)];
 
 const Page = () => {
   return (
@@ -10,12 +83,17 @@ const Page = () => {
         <span className="flex h-10 w-full items-center justify-center rounded-[10px] bg-pink-400 font-bold text-2xl text-white">
           ROUND 1
         </span>
-        <GameProfile nickname="itsmo" score={16200} />
-        <GameProfile nickname="itsmo" score={16200} />
-        <GameProfile nickname="itsmo" score={16200} />
+        {profiles[0].map((profile, index) => (
+          <GameProfile
+            key={profile.id}
+            avatar={profile.avatar as AvatarType}
+            nickname={profile.nickname}
+            score={profile.score}
+          />
+        ))}
       </div>
       <div className="flex items-center justify-center">
-        <div className="flex w-[480px] flex-col items-center justify-center gap-1.5">
+        <div className="flex w-[525px] flex-col items-center justify-center">
           {/* 히스토리 */}
           <div className="flex w-full select-text gap-1 overflow-x-scroll rounded-[10px] px-2 pt-2">
             <span className="h-full flex-col whitespace-nowrap rounded-[10px] bg-neutral-500 p-2 text-white text-xs">
@@ -40,7 +118,7 @@ const Page = () => {
             </span>
           </div>
           {/*  게임 화면 */}
-          <div className="flex h-[260px] w-full flex-col gap-2.5 bg-[url('/game-background.jpg')] bg-bottom bg-cover">
+          <div className="flex h-[281px] w-full flex-col gap-2.5 bg-[url('/game-background.jpg')] bg-bottom bg-cover">
             <div className="flex-col">
               <div className="flex w-full items-start justify-center bg-[#000000] bg-opacity-60 ps-2.5">
                 <div className="flex h-10 w-full items-center justify-start">
@@ -69,7 +147,8 @@ const Page = () => {
               <GameProgressBar total={180} remaining={30} color="yellow" />
               <GameProgressBar total={10} remaining={8} color="sky" />
             </div>
-            <section className="flex h-full w-full items-center justify-center">
+            <GameScore score={0} nickname={'itsmo'} isCorrect={true} />
+            {/* <section className="flex h-full w-full items-center justify-center">
               <section className="flex items-center justify-center gap-5 rounded-[10px] bg-[#000000] bg-opacity-60 px-5 py-10 text-white">
                 <Image
                   src={'/singing-dog.png'}
@@ -87,7 +166,7 @@ const Page = () => {
                   </p>
                 </div>
               </section>
-            </section>
+            </section> */}
           </div>
           {/* 채팅 */}
           <div className="mt-2 flex h-[144px] w-full flex-col overflow-clip rounded-[10px] border-2 bg-white p-2.5">
@@ -109,14 +188,14 @@ const Page = () => {
                 <span>내용</span>
               </div>
             </div>
-            <form className="flex items-center justify-center overflow-clip rounded-[5px] border border-neutral-500">
+            <form className="flex h-[30px] items-center justify-center overflow-clip rounded-[5px] border border-neutral-500">
               <input
                 type="text"
                 className="shrink grow basis-0 self-stretch bg-white p-2.5"
               />
               <button
                 type="submit"
-                className="h-full w-[60px] bg-neutral-300 text-center leading-none"
+                className="h-full w-[60px] bg-neutral-300 text-center leading-none hover:bg-pink-400 hover:text-white"
               >
                 전송
               </button>
@@ -127,13 +206,18 @@ const Page = () => {
       <div className="flex flex-col items-center justify-center gap-5">
         <button
           type="button"
-          className="flex h-10 w-full items-center justify-center rounded-[10px] bg-neutral-300 font-semibold text-2xl hover:bg-red-200 hover:text-white"
+          className="flex h-10 w-full items-center justify-center rounded-[10px] bg-neutral-300 font-semibold text-2xl hover:bg-pink-400 hover:text-white"
         >
           나가기
         </button>
-        <GameProfile nickname="itsmo" score={16200} />
-        <GameProfile nickname="itsmo" score={16200} />
-        <GameProfile nickname="itsmo" score={16200} />
+        {profiles[1].map((profile, index) => (
+          <GameProfile
+            key={profile.id}
+            avatar={profile.avatar as AvatarType}
+            nickname={profile.nickname}
+            score={profile.score}
+          />
+        ))}
       </div>
     </div>
   );
