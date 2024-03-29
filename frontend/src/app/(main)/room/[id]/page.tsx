@@ -4,9 +4,13 @@ import EmptyRoomProfile from '@/components/profile/room/EmptyRoomProfile';
 import RoomProfile from '@/components/profile/room/RoomProfile';
 import RoomHeader from '@/components/room/RoomHeader';
 import { useStompClient } from '@/providers/StompProvider';
-import { useRoomStore } from '@/stores/room';
+import { useRoomActions, useRoomStore } from '@/stores/room';
 import { useUserStore } from '@/stores/user';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  type QueryFilters,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import type { RoomInfoType } from '../../lobby/page';
@@ -52,6 +56,7 @@ const Page = ({ params }: { params: { id: string } }) => {
   const chatRef = useRef<HTMLDivElement>(null);
   const [isEntered, setIsEntered] = useState(false);
   const storedPassword = useRoomStore((state) => state.password);
+  const { invalidate } = useRoomActions;
 
   const { data: room } = useQuery<RoomInfo>({
     queryKey: ['/sub/rooms', 'INFO', params.id],
@@ -199,9 +204,24 @@ const Page = ({ params }: { params: { id: string } }) => {
     });
 
     return () => {
-      if (sub) sub.unsubscribe();
+      if (sub) {
+        sub.unsubscribe();
+      }
+      queryClient.resetQueries({ queryKey: ['/sub/rooms', 'INFO', params.id] });
+      queryClient.resetQueries({ queryKey: ['/sub/rooms', 'CHAT', params.id] });
+      queryClient.resetQueries({
+        queryKey: ['/sub/rooms', 'MEMBERS', params.id],
+      });
+      invalidate();
     };
-  }, [client, client?.connected, queryClient, params.id, isEntered]);
+  }, [
+    client,
+    client?.connected,
+    queryClient,
+    params.id,
+    isEntered,
+    invalidate,
+  ]);
 
   const handleReady = async () => {
     const response = await fetch(
