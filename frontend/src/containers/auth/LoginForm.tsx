@@ -44,8 +44,9 @@ const LoginForm = () => {
   useEffect(() => {
     if (userStore?.nickname) {
       setNickname(userStore.nickname);
+      form.setValue('nickname', userStore.nickname);
     }
-  }, [userStore?.nickname]);
+  }, [userStore?.nickname, form.setValue]);
 
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     if (!userAction || !userStore || !values.nickname) return;
