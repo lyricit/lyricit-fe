@@ -35,7 +35,10 @@ export default function MainLayout({
         </div>
         <Header />
         <main className="flex h-screen w-screen flex-shrink items-center justify-center pt-[60px]">
-          <GeneralContainer color="white" className="m-auto h-[567px]">
+          <GeneralContainer
+            color="white"
+            className="m-auto h-[567px] w-[1200px]"
+          >
             {children}
           </GeneralContainer>
         </main>
