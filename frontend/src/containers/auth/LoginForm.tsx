@@ -5,12 +5,14 @@ import GeneralContainer from '@/components/common/GeneralContainer';
 import { useAvatarStates } from '@/providers/AvatarProvider';
 import useStore from '@/stores/useStore';
 import { useUserActions, useUserStore } from '@/stores/user';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-type LoginUser = z.infer<typeof UserNickname> & {
+type LoginUser = z.infer<typeof formSchema> & {
   memberId: string;
   skinColor: string;
   decoColor: string;
@@ -22,8 +24,11 @@ type LoginResponse = {
   memberId: string;
 };
 
-const UserNickname = z.object({
-  nickname: z.string().max(10, '닉네임은 최대 10글자까지 가능해요.'),
+const formSchema = z.object({
+  nickname: z
+    .string()
+    .min(2, '닉네임은 2글자부터 가능해요.')
+    .max(10, '닉네임은 최대 10글자까지 가능해요.'),
 });
 
 const LoginForm = () => {
@@ -32,7 +37,9 @@ const LoginForm = () => {
   const userAction = useUserActions;
   const userStore = useStore(useUserStore, (state) => state);
   const [nickname, setNickname] = useState<string | undefined>(undefined);
-  const nicknameRef = useRef<HTMLInputElement>(null);
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+  });
 
   useEffect(() => {
     if (userStore?.nickname) {
@@ -40,22 +47,10 @@ const LoginForm = () => {
     }
   }, [userStore?.nickname]);
 
-  const handleSubmit = async () => {
-    if (!userAction || !userStore || !nicknameRef.current) return;
+  const handleSubmit = async (values: z.infer<typeof formSchema>) => {
+    if (!userAction || !userStore || !values.nickname) return;
 
-    const nickname = nicknameRef.current.value.trim();
-
-    const { success } = UserNickname.safeParse({
-      nickname,
-    });
-
-    if (!success) {
-      alert('닉네임은 최대 10글자까지 가능해요.');
-      return;
-    }
-
-    userAction.setAvatar(avatar);
-    userAction.setNickname(nickname);
+    const nickname = values.nickname.trim();
 
     const user: LoginUser = {
       memberId: userStore.id,
@@ -83,6 +78,8 @@ const LoginForm = () => {
         const data: LoginResponse = await response.json();
         console.log(data);
         userAction.setId(data.memberId);
+        userAction.setAvatar(avatar);
+        userAction.setNickname(user.nickname);
         router.push('/lobby');
       } else {
         throw new Error('로그인에 실패했습니다.');
@@ -93,19 +90,26 @@ const LoginForm = () => {
   };
 
   return (
-    <form action={handleSubmit}>
+    <form onSubmit={form.handleSubmit(handleSubmit)}>
       <GeneralContainer color="black" className="gap-5 p-8">
         <div>
           <AvatarSelector />
         </div>
-        <div className="flex flex-col items-center justify-center gap-5">
+        <div className="flex flex-col items-center justify-center">
           <input
-            ref={nicknameRef}
             type="text"
             className="w-56 rounded-[10px] py-2 ps-3"
             placeholder="닉네임을 입력하세요"
             defaultValue={nickname}
+            {...form.register('nickname')}
           />
+          <div className="flex h-6 w-full items-center justify-start ps-2">
+            {form.formState.errors.nickname && (
+              <p className="text-red-500 text-xs">
+                {form.formState.errors.nickname.message}
+              </p>
+            )}
+          </div>
           <motion.button
             initial={{
               scale: 1,
