@@ -79,9 +79,11 @@ const profiles = [dummy.slice(0, 3), dummy.slice(3, 6)];
 
 const Page = () => {
   return (
-    <div className="flex w-full items-center justify-between gap-5 p-10">
-      <div className="flex flex-col items-center justify-center gap-5">
-        <GameRound round={1} />
+    <div className="flex w-full items-center justify-between px-10 py-5">
+      <div className="flex h-full flex-col items-center justify-between">
+        <div className="w-full">
+          <GameRound round={1} />
+        </div>
         {profiles[0].map((profile, index) => (
           <GameProfile
             key={profile.id}
@@ -93,61 +95,62 @@ const Page = () => {
       </div>
       <div className="flex items-center justify-center">
         <div className="flex w-[525px] flex-col items-center justify-center">
-          {/* 히스토리 */}
-          <div className="flex w-full select-text gap-1 overflow-x-scroll rounded-[10px] px-2 pt-2">
-            <span className="h-full flex-col whitespace-nowrap rounded-[10px] bg-neutral-500 p-2 text-white text-xs">
-              <p>제목이 들어갈 영역</p>
-              <p>가수가 들어갈 영역</p>
-            </span>
-            <span className="h-full flex-col whitespace-nowrap rounded-[10px] bg-neutral-500 p-2 text-white text-xs">
-              <p>제목이 들어갈 영역</p>
-              <p>가수가 들어갈 영역</p>
-            </span>
-            <span className="h-full flex-col whitespace-nowrap rounded-[10px] bg-neutral-500 p-2 text-white text-xs">
-              <p>제목이 들어갈 영역</p>
-              <p>가수가 들어갈 영역</p>
-            </span>
-            <span className="h-full flex-col whitespace-nowrap rounded-[10px] bg-neutral-500 p-2 text-white text-xs">
-              <p>제목이 들어갈 영역</p>
-              <p>가수가 들어갈 영역</p>
-            </span>
-            <span className="h-full flex-col whitespace-nowrap rounded-[10px] bg-neutral-500 p-2 text-white text-xs">
-              <p>제목이 들어갈 영역</p>
-              <p>가수가 들어갈 영역</p>
-            </span>
-          </div>
-          {/*  게임 화면 */}
-          <div className="flex h-[281px] w-full flex-col gap-2.5 bg-[url('/game-background.jpg')] bg-bottom bg-cover">
-            <div className="flex-col">
-              <div className="flex w-full items-start justify-center bg-[#000000] bg-opacity-60 ps-2.5">
-                <div className="flex h-10 w-full items-center justify-start">
-                  <span className="font-semibold text-white leading-tight">
-                    키워드
-                  </span>
-                </div>
-                <div className="flex h-10 w-full items-center justify-center">
-                  <span className="font-bold text-lg text-sky-400 leading-normal">
-                    키워드 영역
-                  </span>
-                </div>
-                <div className="flex h-10 w-full items-center justify-end pe-2">
-                  <IoMdStopwatch
-                    size="20px"
-                    style={{ paddingRight: 1 }}
-                    color="white"
-                  />
-                  {/* 라운드 제한시간 */}
-                  <span className="font-semibold text-yellow-400 leading-tight">
-                    180초
-                  </span>
-                </div>
-              </div>
-              {/* 라운드 progress bar */}
-              <GameProgressBar total={180} remaining={30} color="yellow" />
-              <GameProgressBar total={10} remaining={8} color="sky" />
+          <section className="flex w-full flex-col bg-black bg-opacity-80 p-2">
+            {/* 히스토리 */}
+            <div className="flex h-[73px] w-full select-text gap-1 overflow-x-scroll rounded-[10px] px-2 pt-2">
+              <span className="h-full flex-col whitespace-nowrap rounded-[10px] bg-neutral-500 p-2 text-white text-xs">
+                <p>제목이 들어갈 영역</p>
+                <p>가수가 들어갈 영역</p>
+              </span>
+              <span className="h-full flex-col whitespace-nowrap rounded-[10px] bg-neutral-500 p-2 text-white text-xs">
+                <p>제목이 들어갈 영역</p>
+                <p>가수가 들어갈 영역</p>
+              </span>
+              <span className="h-full flex-col whitespace-nowrap rounded-[10px] bg-neutral-500 p-2 text-white text-xs">
+                <p>제목이 들어갈 영역</p>
+                <p>가수가 들어갈 영역</p>
+              </span>
+              <span className="h-full flex-col whitespace-nowrap rounded-[10px] bg-neutral-500 p-2 text-white text-xs">
+                <p>제목이 들어갈 영역</p>
+                <p>가수가 들어갈 영역</p>
+              </span>
+              <span className="h-full flex-col whitespace-nowrap rounded-[10px] bg-neutral-500 p-2 text-white text-xs">
+                <p>제목이 들어갈 영역</p>
+                <p>가수가 들어갈 영역</p>
+              </span>
             </div>
-            <GameScore score={0} nickname={'itsmo'} isCorrect={true} />
-            {/* <section className="flex h-full w-full items-center justify-center">
+            {/*  게임 화면 */}
+            <div className="flex h-[281px] w-full flex-col gap-2.5 bg-[url('/game-background.jpg')] bg-bottom bg-cover">
+              <div className="flex-col">
+                <div className="flex w-full items-start justify-center bg-[#000000] bg-opacity-60 ps-2.5">
+                  <div className="flex h-10 w-full items-center justify-start">
+                    <span className="font-semibold text-white leading-tight">
+                      키워드
+                    </span>
+                  </div>
+                  <div className="flex h-10 w-full items-center justify-center">
+                    <span className="font-bold text-lg text-sky-400 leading-normal">
+                      키워드 영역
+                    </span>
+                  </div>
+                  <div className="flex h-10 w-full items-center justify-end pe-2">
+                    <IoMdStopwatch
+                      size="20px"
+                      style={{ paddingRight: 1 }}
+                      color="white"
+                    />
+                    {/* 라운드 제한시간 */}
+                    <span className="font-semibold text-yellow-400 leading-tight">
+                      180초
+                    </span>
+                  </div>
+                </div>
+                {/* 라운드 progress bar */}
+                <GameProgressBar total={180} remaining={30} color="yellow" />
+                <GameProgressBar total={10} remaining={8} color="sky" />
+              </div>
+              <GameScore score={0} nickname={'itsmo'} isCorrect={true} />
+              {/* <section className="flex h-full w-full items-center justify-center">
               <section className="flex items-center justify-center gap-5 rounded-[10px] bg-[#000000] bg-opacity-60 px-5 py-10 text-white">
                 <Image
                   src={'/singing-dog.png'}
@@ -166,7 +169,8 @@ const Page = () => {
                 </div>
               </section>
             </section> */}
-          </div>
+            </div>
+          </section>
           {/* 채팅 */}
           <div className="mt-2 flex h-[144px] w-full flex-col overflow-clip rounded-[10px] border-2 bg-white p-2.5">
             <div className="h-full w-full select-text flex-col overflow-auto px-2.5 text-sm">
@@ -205,7 +209,7 @@ const Page = () => {
       <div className="flex flex-col items-center justify-center gap-5">
         <button
           type="button"
-          className="flex h-10 w-full items-center justify-center rounded-[10px] bg-neutral-300 font-semibold text-2xl hover:bg-pink-400 hover:text-white"
+          className="flex h-20 w-full items-center justify-center rounded-[10px] bg-neutral-300 font-semibold text-2xl hover:bg-pink-400 hover:text-white"
         >
           나가기
         </button>
