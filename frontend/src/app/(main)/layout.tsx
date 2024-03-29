@@ -6,6 +6,7 @@ import { StompProvider } from '@/providers/StompProvider';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import Image from 'next/image';
+import { useEffect } from 'react';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -20,6 +21,21 @@ export default function MainLayout({
 }: {
   children: React.ReactNode;
 }) {
+  useEffect(() => {
+    const preventClose = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = '';
+    };
+
+    (() => {
+      window.addEventListener('beforeunload', preventClose);
+    })();
+
+    return () => {
+      window.removeEventListener('beforeunload', preventClose);
+    };
+  }, []);
+
   return (
     <StompProvider>
       <QueryClientProvider client={queryClient}>
