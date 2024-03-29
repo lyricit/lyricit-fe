@@ -31,10 +31,12 @@ export default function GameScore({
           <Avatar />
           {/* <span className="font-semibold text-base text-white">{nickname}</span> */}
           <div className="relative z-10">
-            <span className="z-10 text-white">{nickname}</span>
+            <span className="z-10 font-kotra text-white text-xl">
+              {nickname}
+            </span>
             <span
               className={cn(
-                '-z-[1] absolute top-0 left-0 stroke-width-5 text-stroke',
+                '-z-[1] absolute top-0 left-0 stroke-width-5 font-kotra text-stroke text-xl',
                 isCorrect ? 'text-stroke-yellow' : 'text-stroke-violet',
               )}
             >

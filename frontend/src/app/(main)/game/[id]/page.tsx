@@ -1,6 +1,7 @@
 import GameProgressBar from '@/components/game/GameProgressBar';
 import GameScore from '@/components/game/GameScore';
 import GameProfile from '@/components/profile/game/GameProfile';
+import GameRound from '@/components/profile/game/GameRound';
 import type { AvatarType } from '@/types/avatar';
 import { IoMdStopwatch } from 'react-icons/io';
 
@@ -80,9 +81,7 @@ const Page = () => {
   return (
     <div className="flex w-full items-center justify-between gap-5 p-10">
       <div className="flex flex-col items-center justify-center gap-5">
-        <span className="flex h-10 w-full items-center justify-center rounded-[10px] bg-pink-400 font-bold text-2xl text-white">
-          ROUND 1
-        </span>
+        <GameRound round={1} />
         {profiles[0].map((profile, index) => (
           <GameProfile
             key={profile.id}
