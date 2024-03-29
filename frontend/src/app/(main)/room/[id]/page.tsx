@@ -200,6 +200,27 @@ const Page = ({ params }: { params: { id: string } }) => {
             },
           );
           break;
+        case 'LEADER_CHANGED':
+          // 리더 변경
+          queryClient.setQueryData<RoomInfo>(
+            ['/sub/rooms', 'INFO', params.id],
+            (prev) => {
+              return { ...prev, leaderId: payload };
+            },
+          );
+          // 리더 준비 상태 변경
+          queryClient.setQueryData<MemberType[]>(
+            ['/sub/rooms', 'MEMBERS', params.id],
+            (prev) => {
+              return (prev ?? []).map((member) => {
+                if (member.member.memberId === payload) {
+                  return { ...member, isReady: false };
+                }
+                return member;
+              });
+            },
+          );
+          break;
       }
     });
 
