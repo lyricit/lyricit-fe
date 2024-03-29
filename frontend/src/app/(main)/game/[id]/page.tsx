@@ -1,10 +1,11 @@
+import GameProgressBar from '@/components/game/GameProgressBar';
 import GameProfile from '@/components/profile/game/GameProfile';
 import Image from 'next/image';
 import { IoMdStopwatch } from 'react-icons/io';
 
 const Page = () => {
   return (
-    <div className="flex w-full items-center justify-between p-10">
+    <div className="flex w-full items-center justify-between gap-5 p-10">
       <div className="flex flex-col items-center justify-center gap-5">
         <span className="flex h-10 w-full items-center justify-center rounded-[10px] bg-pink-400 font-bold text-2xl text-white">
           ROUND 1
@@ -65,13 +66,8 @@ const Page = () => {
                 </div>
               </div>
               {/* 라운드 progress bar */}
-              <div className="flex h-1 w-full bg-transparent dark:bg-neutral-600">
-                <div className="h-1 w-[80%] bg-yellow-400" />
-              </div>
-              {/* 가사를 맞춘 사람에 대한 progress bar */}
-              <div className="flex h-1 w-full bg-transparent dark:bg-neutral-600">
-                <div className="h-1 w-[40%] bg-sky-400" />
-              </div>
+              <GameProgressBar total={180} remaining={30} color="yellow" />
+              <GameProgressBar total={10} remaining={8} color="sky" />
             </div>
             <section className="flex h-full w-full items-center justify-center">
               <section className="flex items-center justify-center gap-5 rounded-[10px] bg-[#000000] bg-opacity-60 px-5 py-10 text-white">
