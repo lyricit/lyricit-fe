@@ -261,15 +261,20 @@ const Page = () => {
 
   const handleSubmit = (event: React.MouseEvent) => {
     event.preventDefault();
+
     if (!userStore || !client.connected) return;
 
-    if (!inputRef.current || inputRef.current?.value === '') return;
+    if (!inputRef.current) return;
+
+    const payload = inputRef.current.value.trim();
+
+    if (payload === '') return;
 
     client.publish({
       destination: '/pub/chat/lounge',
       body: JSON.stringify({
         nickname: userStore.nickname,
-        content: inputRef.current.value,
+        content: payload,
       }),
     });
 
@@ -329,6 +334,7 @@ const Page = () => {
           <form className="inline-flex h-[30px] w-[300px] items-center justify-center overflow-clip rounded-[5px] border border-neutral-500 bg-white">
             <input
               ref={inputRef}
+              maxLength={100}
               className="shrink grow basis-0 self-stretch bg-white p-2.5"
             />
             <button

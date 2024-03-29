@@ -266,14 +266,18 @@ const Page = ({ params }: { params: { id: string } }) => {
     event.preventDefault();
     if (!userStore || !client.connected) return;
 
-    if (!inputRef.current || inputRef.current?.value === '') return;
+    if (!inputRef.current) return;
+
+    const payload = inputRef.current.value.trim();
+
+    if (payload === '') return;
 
     client.publish({
       destination: '/pub/chat/room',
       body: JSON.stringify({
         roomNumber: params.id,
         nickname: userStore.nickname,
-        content: inputRef.current.value,
+        content: payload,
       }),
     });
 
