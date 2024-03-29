@@ -17,19 +17,30 @@ export default function GameScore({
   return (
     <section
       className={cn(
-        'flex items-center justify-center bg-opacity-40',
+        'flex h-[180px] w-full items-center justify-center bg-opacity-40',
         isCorrect ? 'bg-yellow-600' : 'bg-violet-800',
       )}
     >
       <div
         className={cn(
-          'relative flex grow items-center justify-center gap-10 overflow-hidden bg-opacity-60 p-5',
+          'relative flex grow items-center justify-evenly gap-2 overflow-hidden bg-opacity-60 p-5',
           isCorrect ? 'bg-yellow-400' : 'bg-violet-600',
         )}
       >
         <div className="z-10 flex flex-col items-center justify-center">
           <Avatar />
-          <Nickname nickname={nickname} />
+          {/* <span className="font-semibold text-base text-white">{nickname}</span> */}
+          <div className="relative z-10">
+            <span className="z-10 text-white">{nickname}</span>
+            <span
+              className={cn(
+                '-z-[1] absolute top-0 left-0 stroke-width-5 text-stroke',
+                isCorrect ? 'text-stroke-yellow' : 'text-stroke-violet',
+              )}
+            >
+              {nickname}
+            </span>
+          </div>
         </div>
         <div
           className={cn(
