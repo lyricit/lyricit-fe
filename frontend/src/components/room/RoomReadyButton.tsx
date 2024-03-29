@@ -3,7 +3,7 @@
 import { cn } from '@/utils';
 import { motion } from 'framer-motion';
 
-export default function RoomStartButton({
+export default function RoomReadyButton({
   isReady,
 }: {
   isReady: boolean;
@@ -14,10 +14,8 @@ export default function RoomStartButton({
       whileHover={{
         background: 'linear-gradient(to right, #f266ab, #2cd3e1)',
       }}
-      // ready to start 아닌 경우에만 회전 애니메이션
-
       animate={{
-        rotate: isReady ? [0, 3, -3, 3, -3, 0] : 0,
+        rotate: !isReady ? [0, 3, -3, 3, -3, 0] : 0,
         transition: {
           duration: 1,
           repeatDelay: 2,
@@ -30,10 +28,10 @@ export default function RoomStartButton({
         className={cn(
           'h-full w-full bg-gradient-to-r from-pink-400 to-sky-400 bg-clip-text font-bold text-3xl text-transparent hover:text-white',
 
-          isReady ? 'bg-clip-text' : 'cursor-not-allowed bg-neutral-500',
+          !isReady ? 'bg-clip-text' : 'bg-neutral-500',
         )}
       >
-        START
+        READY
       </button>
     </motion.div>
   );
