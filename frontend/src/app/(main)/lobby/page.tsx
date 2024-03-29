@@ -278,7 +278,7 @@ const Page = () => {
   };
 
   return (
-    <div className="flex w-full items-center justify-center gap-5 p-5">
+    <div className="flex w-full items-center justify-center gap-10 px-10 py-5">
       <div className="flex h-full flex-col items-center justify-start gap-6">
         <div className="inline-flex w-full items-end justify-between px-3">
           <div className="inline-flex gap-2.5">

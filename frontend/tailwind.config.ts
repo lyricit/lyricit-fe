@@ -188,6 +188,9 @@ const config: Config = {
         flickering: 'flicker 8s 1s forwards',
         blinking: 'blink 1.5s step-end infinite',
       },
+      boxShadow: {
+        'custom-pink': '0px 0px 40px 0px rgba(242, 102, 171, 0.50)',
+      },
     },
   },
   plugins: [
