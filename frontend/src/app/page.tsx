@@ -1,10 +1,15 @@
+'use client';
+
 import Spotlight from '@/components/common/Spotlight';
 import LogoHero from '@/components/logo/LogoHero';
 import LoginForm from '@/containers/auth/LoginForm';
 import { AvatarProvider } from '@/providers/AvatarProvider';
+import { consoleLogLogo } from '@/utils/console';
 import Image from 'next/image';
 
 export default function Home() {
+  consoleLogLogo();
+
   return (
     <main className="container">
       <div className="-z-10 fixed inset-0 overflow-hidden">
