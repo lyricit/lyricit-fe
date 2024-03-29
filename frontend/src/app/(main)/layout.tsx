@@ -1,6 +1,7 @@
 'use client';
 
 import GeneralContainer from '@/components/common/GeneralContainer';
+import Header from '@/components/common/header/Header';
 import { StompProvider } from '@/providers/StompProvider';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
@@ -32,11 +33,9 @@ export default function MainLayout({
             />
           </div>
         </div>
-        <main className="h-screen w-screen px-[120px]">
-          <GeneralContainer
-            color="white"
-            className="m-auto h-[567px] w-[1200px]"
-          >
+        <Header />
+        <main className="flex h-screen w-screen flex-shrink items-center justify-center pt-[60px]">
+          <GeneralContainer color="white" className="m-auto h-[567px]">
             {children}
           </GeneralContainer>
         </main>

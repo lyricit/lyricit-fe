@@ -78,6 +78,10 @@
     -webkit-text-stroke-width: 2px;
   }
 
+  .stroke-width-1 {
+    -webkit-text-stroke-width: 1px;
+  }
+
   .text-stroke-black {
     -webkit-text-stroke-color: rgba(0, 0, 0, 1);
   }
@@ -92,6 +96,10 @@
 
   .text-stroke-violet {
     -webkit-text-stroke-color: rgba(106, 44, 136, 1);
+  }
+
+  .text-stroke-pink {
+    -webkit-text-stroke-color: rgb(var(--color-primary));
   }
 
   .text-stroke-darker {
