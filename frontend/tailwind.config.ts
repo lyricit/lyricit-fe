@@ -119,6 +119,7 @@ const config: Config = {
         pretendard: ['var(--font-pretendard)'],
         chab: ['var(--font-chab)'],
         kotra: ['var(--font-kotra)'],
+        katuri: ['var(--font-katuri)'],
       },
       textShadow: {
         logo: {

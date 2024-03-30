@@ -1,6 +1,12 @@
 import type { Preview } from '@storybook/react';
 import React from 'react';
-import { Chab, KotraHope, LogoFont, Pretendard } from '../src/app/fonts';
+import {
+  Chab,
+  Katuri,
+  KotraHope,
+  LogoFont,
+  Pretendard,
+} from '../src/app/fonts';
 import '../src/app/globals.css';
 import { cn } from '../src/utils';
 
@@ -35,6 +41,7 @@ const preview: Preview = {
           LogoFont.variable,
           Chab.variable,
           KotraHope.variable,
+          Katuri.variable,
           'font-pretendard',
         )}
       >

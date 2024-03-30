@@ -23,3 +23,9 @@ export const KotraHope = localFont({
   display: 'swap',
   variable: '--font-kotra',
 });
+
+export const Katuri = localFont({
+  src: '../../public/fonts/Katuri.ttf',
+  display: 'swap',
+  variable: '--font-katuri',
+});
