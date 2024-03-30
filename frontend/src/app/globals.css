@@ -102,6 +102,10 @@
     -webkit-text-stroke-color: rgb(var(--color-primary));
   }
 
+  .text-stroke-blue {
+    -webkit-text-stroke-color: rgba(0, 47, 166, 1);
+  }
+
   .text-stroke-darker {
     -webkit-text-stroke-width: 3px;
     -webkit-text-stroke-color: rgba(0, 0, 0, 0.3);
