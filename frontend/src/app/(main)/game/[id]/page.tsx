@@ -1,3 +1,4 @@
+import GameHeader from '@/components/game/GameHeader';
 import GameIntro from '@/components/game/GameIntro';
 import GameProgressBar from '@/components/game/GameProgressBar';
 import GameScore from '@/components/game/GameScore';
@@ -123,29 +124,7 @@ const Page = () => {
             {/*  게임 화면 */}
             <div className="flex h-[281px] w-full flex-col gap-2.5 bg-[url('/game-background.jpg')] bg-bottom bg-cover">
               <div className="flex-col">
-                <div className="flex w-full items-start justify-center bg-[#000000] bg-opacity-60 ps-2.5">
-                  <div className="flex h-10 w-full items-center justify-start">
-                    <span className="font-semibold text-white leading-tight">
-                      키워드
-                    </span>
-                  </div>
-                  <div className="flex h-10 w-full items-center justify-center">
-                    <span className="font-bold text-lg text-sky-400 leading-normal">
-                      키워드 영역
-                    </span>
-                  </div>
-                  <div className="flex h-10 w-full items-center justify-end pe-2">
-                    <IoMdStopwatch
-                      size="20px"
-                      style={{ paddingRight: 1 }}
-                      color="white"
-                    />
-                    {/* 라운드 제한시간 */}
-                    <span className="font-semibold text-yellow-400 leading-tight">
-                      180초
-                    </span>
-                  </div>
-                </div>
+                <GameHeader keyword="심장" limit={180} />
                 {/* 라운드 progress bar */}
                 <GameProgressBar total={180} remaining={30} color="yellow" />
                 <GameProgressBar total={10} remaining={8} color="sky" />
