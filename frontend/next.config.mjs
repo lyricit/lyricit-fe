@@ -4,9 +4,9 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'cdnimg.melon.co.kr',
+        hostname: 'i.scdn.co',
         port: '',
-        pathname: '/cm2/album/images/**',
+        pathname: '/image/**',
       },
     ],
   },

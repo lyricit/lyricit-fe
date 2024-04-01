@@ -12,7 +12,7 @@ export default function TrackLyric({
   );
 
   return (
-    <div className="inline-flex h-[381px] w-[510px] flex-col items-start justify-start gap-2.5 px-5">
+    <div className="inline-flex h-[381px] w-[100%] flex-col items-start justify-start gap-2.5 px-5">
       <article
         className="h-[1130px] self-stretch whitespace-pre-wrap text-white"
         // biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
