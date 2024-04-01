@@ -76,6 +76,23 @@ const dummy = [
   },
 ];
 
+// dummy의 길이가 6개 미만인 경우... 나머지 dummy의 nickname을 빈 문자열로 채운다
+if (dummy.length < 6) {
+  for (let i = 0; i < 6 - dummy.length; i++) {
+    dummy.push({
+      id: '',
+      nickname: '',
+      score: 0,
+      avatar: {
+        faceType: 'default',
+        decoType: 'default',
+        skinColor: '#ffffff',
+        decoColor: 'black',
+      },
+    });
+  }
+}
+
 // 위의 dummy를 3개씩 2개의 배열로 나눈다
 const profiles = [dummy.slice(0, 3), dummy.slice(3, 6)];
 
