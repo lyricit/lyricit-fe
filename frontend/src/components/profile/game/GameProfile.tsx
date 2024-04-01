@@ -11,17 +11,19 @@ const GameProfile = ({
   return (
     <div className="flex h-[130px] w-[265px] items-center justify-evenly rounded-[10px] border-2 border-black bg-white">
       <div>
-        <Avatar
-          size={100}
-          faceType={avatar.faceType}
-          decoType={avatar.decoType}
-          skinColor={avatar.skinColor}
-          decoColor={avatar.decoColor}
-        />
+        {nickname === '' ? null : (
+          <Avatar
+            size={100}
+            faceType={avatar.faceType}
+            decoType={avatar.decoType}
+            skinColor={avatar.skinColor}
+            decoColor={avatar.decoColor}
+          />
+        )}
       </div>
       <div className="mr-2 flex h-[120px] flex-col items-center justify-center gap-2.5">
         <span className="font-semibold">{nickname}</span>
-        <Score score={score} />
+        {nickname === '' ? null : <Score score={score} />}
       </div>
     </div>
   );
