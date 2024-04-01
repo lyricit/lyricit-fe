@@ -9,6 +9,7 @@ export default function TrackList({
     <>
       {items.map(({ id, imageUrl, title, artist }: TrackProps) => (
         <div
+          className="cursor-pointer border-white border-b hover:bg-black hover:bg-opacity-30"
           onClick={() => {
             showDetailPage(id);
           }}
@@ -20,7 +21,6 @@ export default function TrackList({
             artist={artist}
             key={`${title} - ${artist}`}
           />
-          <div className="border-white border-t" />
         </div>
       ))}
     </>
