@@ -10,7 +10,7 @@ const GameResultModal = ({ onClick }: { onClick: MouseEventHandler }) => {
         <span className="flex items-center justify-center bg-sky-400 px-5 font-chab text-2xl text-white">
           RESULTS
         </span>
-        <div className="flex flex-col items-center justify-center gap-2 p-2 font-chab">
+        <div className="flex flex-col items-center justify-center gap-2 p-2 font-katuri">
           <p className="flex items-center justify-start gap-5 self-stretch">
             <span className="w-5">🥇</span>
             <span className="w-[120px]">heecircle</span>
