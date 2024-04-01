@@ -1,13 +1,8 @@
 import { Avatar } from '@/components/avatar';
-import type { AvatarType } from '@/types/avatar';
-import Nickname from '../Nickname';
+import type { ProfileProps } from '@/types/profile';
 import Score from './Score';
 
-const GameProfile = ({
-  avatar,
-  nickname,
-  score,
-}: { avatar: AvatarType; nickname: string; score: number }) => {
+const GameProfile = ({ avatar, nickname, score }: ProfileProps) => {
   return (
     <div className="flex h-[130px] w-[265px] items-center justify-evenly rounded-[10px] border-2 border-black bg-white">
       <div>
