@@ -46,18 +46,15 @@ export default function Page() {
   };
   return (
     <div className="flex w-[100%] items-center justify-evenly">
-      <div className={'flex w-full flex-col items-center px-10'}>
-        <form
-          onSubmit={handleSubmit}
-          className="inline-flex h-[46px] w-[100%] px-10"
-        >
+      <div className={'flex w-full flex-col items-center px-20'}>
+        <form onSubmit={handleSubmit} className="inline-flex h-[46px] w-[100%]">
           <TrackSearchBox
             placeholder="가사를 입력하세요"
             onChange={handleInputChange}
           />
           <TrackSearchButton />
         </form>
-        <div className="-webkit-scrollbar-display-none mt-5 inline-flex h-[25rem] w-[100%] flex-col gap-3.5 overflow-hidden overflow-y-scroll p-2.5">
+        <div className="-webkit-scrollbar-display-none mt-5 inline-flex h-[25rem] w-[100%] flex-col overflow-hidden overflow-y-scroll p-2.5">
           <TrackList items={items} showDetailPage={showDetailPage} />
         </div>
       </div>
