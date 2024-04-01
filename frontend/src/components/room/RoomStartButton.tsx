@@ -11,9 +11,15 @@ export default function RoomStartButton({
   return (
     <motion.div
       className="h-full w-full flex-grow rounded-[10px] bg-white"
-      whileHover={{
-        background: 'linear-gradient(to right, #f266ab, #2cd3e1)',
-      }}
+      // ready to start 경우에만 hover 애니메이션
+
+      whileHover={
+        isReady
+          ? {
+              background: 'linear-gradient(to right, #f266ab, #2cd3e1)',
+            }
+          : {}
+      }
       // ready to start 아닌 경우에만 회전 애니메이션
 
       animate={{
@@ -28,9 +34,11 @@ export default function RoomStartButton({
       <button
         type="button"
         className={cn(
-          'h-full w-full bg-gradient-to-r from-pink-400 to-sky-400 bg-clip-text font-bold text-3xl text-transparent hover:text-white',
+          'h-full w-full bg-gradient-to-r from-pink-400 to-sky-400 bg-clip-text font-bold text-3xl text-transparent',
 
-          isReady ? 'bg-clip-text' : 'cursor-not-allowed bg-neutral-500',
+          isReady
+            ? 'bg-clip-text hover:text-white'
+            : 'cursor-not-allowed bg-neutral-500',
         )}
       >
         START
