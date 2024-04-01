@@ -20,6 +20,7 @@ export default function TrackList({
             artist={artist}
             key={`${title} - ${artist}`}
           />
+          <div className="border-white border-t" />
         </div>
       ))}
     </>
