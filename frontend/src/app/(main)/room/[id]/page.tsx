@@ -275,6 +275,7 @@ const Page = ({ params }: { params: { id: string } }) => {
     client.publish({
       destination: '/pub/chat/room',
       body: JSON.stringify({
+        memberId: userStore.id,
         roomNumber: params.id,
         nickname: userStore.nickname,
         content: payload,
