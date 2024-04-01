@@ -322,7 +322,7 @@ const Page = () => {
           </div>
           <div
             ref={chatRef}
-            className="inline-flex h-full w-full select-text flex-col overflow-auto px-2.5"
+            className="inline-flex h-full w-full select-text flex-col overflow-auto px-2.5 py-1"
           >
             {chats?.map((chat, index) => (
               <div key={`${chat.nickname}${index}`} className="block">
