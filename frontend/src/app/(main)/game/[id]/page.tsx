@@ -1,181 +1,234 @@
+'use client';
+
 import GameHeader from '@/components/game/GameHeader';
 import GameIntro from '@/components/game/GameIntro';
+import GameLyric from '@/components/game/GameLyric';
 import GameProgressBar from '@/components/game/GameProgressBar';
 import GameScore from '@/components/game/GameScore';
+import GameTrack from '@/components/game/GameTrack';
 import GameProfile from '@/components/profile/game/GameProfile';
+import GameProfileList from '@/components/profile/game/GameProfileList';
 import GameRound from '@/components/profile/game/GameRound';
-import type { AvatarType } from '@/types/avatar';
-import { IoMdStopwatch } from 'react-icons/io';
+import { useGameActions, useGameStates } from '@/providers/GameProvider';
+import { useStompClient } from '@/providers/StompProvider';
+import { useUserStore } from '@/stores/user';
+import type {
+  GameChat,
+  GameInfo,
+  GameRoomInfo,
+  GameRoomMember,
+} from '@/types/game';
+import {
+  type QueryFilters,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
+import { useEffect, useMemo, useRef } from 'react';
 
-const dummy = [
-  {
-    id: '412b439f-5a68-5d83-9f48-a4fb8a2f51eb',
-    nickname: '가나다라마바사아자차',
-    score: 16200,
-    avatar: {
-      faceType: 'default',
-      decoType: 'cap',
-      skinColor: '#ffe6f0',
-      decoColor: '#ff4d6d',
-    },
-  },
-  {
-    id: '281fa989-d2af-5108-b3c9-64135a03a37f',
-    nickname: '가나다라마바사아자차',
-    score: 16200,
-    avatar: {
-      faceType: 'default',
-      decoType: 'goggle',
-      skinColor: '#aab675',
-      decoColor: '#b317bb',
-    },
-  },
-  {
-    id: '7fa742c2-dc0a-563e-9036-c1f06c9a1a20',
-    nickname: '가나다라마바사아자차',
-    score: 16200,
-    avatar: {
-      faceType: 'default',
-      decoType: 'mohican',
-      skinColor: '#fcffa1',
-      decoColor: '#099ec8',
-    },
-  },
-  {
-    id: 'f777d354-b934-52c5-86d8-db06e7e05cdb',
-    nickname: '가나다라마바사아자차',
-    score: 16200,
-    avatar: {
-      faceType: 'default',
-      decoType: 'cap',
-      skinColor: '#ffe6f0',
-      decoColor: '#ff4d6d',
-    },
-  },
-  {
-    id: 'a4132dae-ff60-5495-9290-bbe291b80847',
-    nickname: '가나다라마바사아자차',
-    score: 16200,
-    avatar: {
-      faceType: 'default',
-      decoType: 'goggle',
-      skinColor: '#aab675',
-      decoColor: '#b317bb',
-    },
-  },
-  {
-    id: '01dec175-18cd-5fb1-a67f-ed7b65ae222c',
-    nickname: '가나다라마바사아자차',
-    score: 16200,
-    avatar: {
-      faceType: 'default',
-      decoType: 'mohican',
-      skinColor: '#fcffa1',
-      decoColor: '#099ec8',
-    },
-  },
-];
+const Page = ({ params }: { params: { id: string } }) => {
+  const { client } = useStompClient();
+  const queryClient = useQueryClient();
+  const inputRef = useRef<HTMLInputElement>(null);
+  const chatRef = useRef<HTMLDivElement>(null);
+  const userStore = useUserStore((state) => state);
+  const { status, timer, highlight, speaker, score, history } = useGameStates();
+  const { timer: timerAction } = useGameActions();
 
-// dummy의 길이가 6개 미만인 경우... 나머지 dummy의 nickname을 빈 문자열로 채운다
-if (dummy.length < 6) {
-  for (let i = 0; i < 6 - dummy.length; i++) {
-    dummy.push({
-      id: '',
-      nickname: '',
-      score: 0,
-      avatar: {
-        faceType: 'default',
-        decoType: 'default',
-        skinColor: '#ffffff',
-        decoColor: 'black',
+  const headerTime = useMemo(() => {
+    return highlight.isRunning ? highlight.leftTime : timer.leftTime;
+  }, [highlight, timer]);
+
+  const { data: chats } = useQuery<GameChat[]>({
+    queryKey: ['/sub/rooms', 'GAME_CHAT', params.id],
+    queryFn: () =>
+      queryClient.getQueryData<GameChat[]>([
+        '/sub/rooms',
+        'GAME_CHAT',
+        params.id,
+      ]) || [],
+    enabled: !!client,
+  });
+
+  const { data: gameInfo } = useQuery<GameInfo>({
+    queryKey: ['/sub/rooms', 'GAME_INFO', params.id],
+    queryFn: () =>
+      queryClient.getQueryData<GameInfo>([
+        '/sub/rooms',
+        'GAME_INFO',
+        params.id,
+      ]) || { currentRound: 0, keyword: '' },
+    enabled: !!client,
+  });
+
+  const { data: roomInfo } = useQuery<GameRoomInfo>({
+    queryKey: ['/sub/rooms', 'GAME_ROOM_INFO', params.id],
+    queryFn: () =>
+      queryClient.getQueryData<GameRoomInfo>([
+        '/sub/rooms/',
+        'GAME_INFO',
+        params.id,
+      ]) || {
+        roomNumber: '0',
+        name: '방 이름',
+        roundLimit: 0,
+        roundTime: 0,
+        leaderId: '0',
       },
+    enabled: !!client,
+  });
+
+  const { data: members } = useQuery<GameRoomMember[]>({
+    queryKey: ['/sub/rooms', 'GAME_MEMBERS', params.id],
+    queryFn: () =>
+      queryClient.getQueryData<GameRoomMember[]>([
+        '/sub/rooms',
+        'GAME_MEMBERS',
+        params.id,
+      ]) || [],
+    enabled: !!client,
+  });
+
+  const profiles = useMemo(() => {
+    if (!members) return [[], []];
+
+    return [members.slice(0, 3), members.slice(3, 6)];
+  }, [members]);
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  useEffect(() => {
+    if (!roomInfo || !roomInfo.roundTime) return;
+    timerAction.init(roomInfo?.roundTime);
+  }, []);
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  useEffect(() => {
+    queryClient.resetQueries({
+      queryKey: ['/sub/rooms', 'GAME_INFO', params.id],
     });
-  }
-}
+  }, []);
 
-// 위의 dummy를 3개씩 2개의 배열로 나눈다
-const profiles = [dummy.slice(0, 3), dummy.slice(3, 6)];
+  const handleChat = (event: React.MouseEvent) => {
+    event.preventDefault();
+    if (!userStore || !client.connected) return;
 
-const Page = () => {
+    if (!inputRef.current) return;
+
+    const payload = inputRef.current.value.trim();
+
+    if (payload === '') return;
+
+    client.publish({
+      destination: '/pub/chat/game',
+      body: JSON.stringify({
+        memberId: userStore.id,
+        roomNumber: params.id,
+        nickname: userStore.nickname,
+        content: payload,
+      }),
+    });
+
+    inputRef.current.value = '';
+    inputRef.current.focus();
+  };
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  useEffect(() => {
+    chatRef.current?.lastElementChild?.scrollIntoView();
+  }, [chats]);
+
   return (
     <div className="flex w-full items-center justify-between px-10 py-5">
-      <div className="flex h-full flex-col items-center justify-between">
+      <div className="flex h-full flex-col items-center justify-center gap-5">
         <div className="w-full">
-          <GameRound round={1} />
+          <GameRound round={gameInfo?.currentRound || 0} />
         </div>
-        {profiles[0].map((profile, index) => (
-          <GameProfile
-            key={profile.id}
-            avatar={profile.avatar as AvatarType}
-            nickname={profile.nickname}
-            score={profile.score}
-          />
-        ))}
+        <GameProfileList position="left" items={profiles[0]} />
       </div>
       <div className="flex items-center justify-center">
         <div className="flex w-[525px] flex-col items-center justify-center">
           <section className="flex w-full flex-col bg-black bg-opacity-80 p-2">
             {/* 히스토리 */}
             <div className="flex h-[73px] w-full select-text gap-1 overflow-x-scroll rounded-[10px] px-2 pt-2">
-              <span className="h-full flex-col whitespace-nowrap rounded-[10px] bg-neutral-500 p-2 text-white text-xs">
-                <p>제목이 들어갈 영역</p>
-                <p>가수가 들어갈 영역</p>
-              </span>
-              <span className="h-full flex-col whitespace-nowrap rounded-[10px] bg-neutral-500 p-2 text-white text-xs">
-                <p>제목이 들어갈 영역</p>
-                <p>가수가 들어갈 영역</p>
-              </span>
-              <span className="h-full flex-col whitespace-nowrap rounded-[10px] bg-neutral-500 p-2 text-white text-xs">
-                <p>제목이 들어갈 영역</p>
-                <p>가수가 들어갈 영역</p>
-              </span>
-              <span className="h-full flex-col whitespace-nowrap rounded-[10px] bg-neutral-500 p-2 text-white text-xs">
-                <p>제목이 들어갈 영역</p>
-                <p>가수가 들어갈 영역</p>
-              </span>
-              <span className="h-full flex-col whitespace-nowrap rounded-[10px] bg-neutral-500 p-2 text-white text-xs">
-                <p>제목이 들어갈 영역</p>
-                <p>가수가 들어갈 영역</p>
-              </span>
+              {history.map((item, index) => (
+                <span
+                  key={`${index}-${item.title}-${item.artist}`}
+                  className="h-full flex-col whitespace-nowrap rounded-[10px] bg-neutral-500 p-2 text-white text-xs"
+                >
+                  <p>{item.title}</p>
+                  <p>{item.artist}</p>
+                </span>
+              ))}
             </div>
             {/*  게임 화면 */}
             <div className="flex h-[281px] w-full flex-col gap-2.5 bg-[url('/game-background.jpg')] bg-bottom bg-cover">
               <div className="flex-col">
-                <GameHeader keyword="심장" limit={180} />
+                <GameHeader
+                  keyword={gameInfo?.keyword || ''}
+                  limit={headerTime}
+                  isHighlighted={highlight.isRunning}
+                />
                 {/* 라운드 progress bar */}
-                <GameProgressBar total={180} remaining={30} color="yellow" />
-                <GameProgressBar total={10} remaining={8} color="sky" />
+                <GameProgressBar
+                  total={roomInfo?.roundTime || 999}
+                  remaining={timer.leftTime}
+                  color="yellow"
+                />
+                {status === 'highlight' && (
+                  <GameProgressBar
+                    total={highlight.timeLimit}
+                    remaining={highlight.leftTime}
+                    color="sky"
+                  />
+                )}
               </div>
-              <GameScore score={0} nickname={'itsmo'} isCorrect={true} />
-              {/* <GameIntro /> */}
+              {/* <GameScore score={0} nickname={'itsmo'} isCorrect={true} /> */}
+              {status === 'highlight' && (
+                <>
+                  <GameLyric lyric={highlight.lyric} />
+                  <GameTrack
+                    title={highlight.title}
+                    artist={highlight.artist}
+                  />
+                </>
+              )}
+              {status === 'idle' && <GameIntro />}
+              {status === 'correct' && (
+                <GameScore
+                  score={score}
+                  nickname={speaker.nickname}
+                  isCorrect
+                />
+              )}
+              {status === 'incorrect' && (
+                <GameScore
+                  score={score}
+                  nickname={speaker.nickname}
+                  isCorrect={false}
+                />
+              )}
             </div>
           </section>
           {/* 채팅 */}
           <div className="mt-2 flex h-[144px] w-full flex-col overflow-clip rounded-[10px] border-2 bg-white p-2.5">
-            <div className="h-full w-full select-text flex-col overflow-auto px-2.5 text-sm">
-              <div className="block">
-                <span>닉네임: </span>
-                <span>내용</span>
-              </div>
-              <div className="block">
-                <span>닉네임: </span>
-                <span>내용</span>
-              </div>
-              <div className="block">
-                <span>닉네임: </span>
-                <span>내용</span>
-              </div>
-              <div className="block">
-                <span>닉네임: </span>
-                <span>내용</span>
-              </div>
+            <div
+              ref={chatRef}
+              className="h-full w-full select-text flex-col overflow-auto px-2.5 text-sm"
+            >
+              {chats?.map((chat, index) => (
+                <div key={`${chat.nickname}${index}`} className="block">
+                  <span>{chat.nickname}: </span>
+                  <span>{chat.content}</span>
+                </div>
+              ))}
             </div>
             <form className="flex h-[30px] items-center justify-center overflow-clip rounded-[5px] border border-neutral-500">
               <input
+                ref={inputRef}
                 type="text"
                 className="shrink grow basis-0 self-stretch bg-white p-2.5"
               />
               <button
+                onClick={handleChat}
                 type="submit"
                 className="h-full w-[60px] bg-neutral-300 text-center leading-none hover:bg-pink-400 hover:text-white"
               >
@@ -185,21 +238,14 @@ const Page = () => {
           </div>
         </div>
       </div>
-      <div className="flex flex-col items-center justify-center gap-5">
+      <div className="flex h-full flex-col items-center justify-center gap-5">
         <button
           type="button"
           className="flex h-20 w-full items-center justify-center rounded-[10px] bg-neutral-300 font-semibold text-2xl hover:bg-pink-400 hover:text-white"
         >
           나가기
         </button>
-        {profiles[1].map((profile, index) => (
-          <GameProfile
-            key={profile.id}
-            avatar={profile.avatar as AvatarType}
-            nickname={profile.nickname}
-            score={profile.score}
-          />
-        ))}
+        <GameProfileList position="right" items={profiles[1]} />
       </div>
     </div>
   );

@@ -2,10 +2,13 @@
 
 import { cn } from '@/utils';
 import { motion } from 'framer-motion';
+import type { MouseEventHandler } from 'react';
 
 export default function RoomStartButton({
+  onClick,
   isReady,
 }: {
+  onClick: MouseEventHandler;
   isReady: boolean;
 }) {
   return (
@@ -33,6 +36,7 @@ export default function RoomStartButton({
     >
       <button
         type="button"
+        onClick={onClick}
         className={cn(
           'h-full w-full bg-gradient-to-r from-pink-400 to-sky-400 bg-clip-text font-bold text-3xl text-transparent',
 
