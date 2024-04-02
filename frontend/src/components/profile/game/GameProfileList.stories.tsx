@@ -16,24 +16,26 @@ export const Default: Story = {
   args: {
     items: [
       {
-        nickname: 'itsmo',
-        score: 16200,
-        avatar: {
+        member: {
+          memberId: '',
+          nickname: 'nickname 1',
+          decoType: 'default',
           faceType: 'default',
-          decoType: 'cap',
-          skinColor: '#ffffff',
           decoColor: '#000000',
+          skinColor: '#ff00f0',
         },
+        score: 16200,
       },
       {
-        nickname: 'kimgiraffe',
-        score: 22400,
-        avatar: {
+        member: {
+          memberId: '',
+          nickname: 'nickname 2',
+          decoType: 'default',
           faceType: 'default',
-          decoType: 'mask',
-          skinColor: '#ffe100',
-          decoColor: '#ffffff',
+          decoColor: '#000000',
+          skinColor: '#ff2546',
         },
+        score: 22400,
       },
     ],
   },
