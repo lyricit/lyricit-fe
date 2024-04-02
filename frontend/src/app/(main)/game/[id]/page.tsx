@@ -164,7 +164,7 @@ const Page = ({ params }: { params: { id: string } }) => {
               ))}
             </div>
             {/*  게임 화면 */}
-            <div className="flex h-[281px] w-full flex-col gap-2.5 bg-[url('/game-background.jpg')] bg-bottom bg-cover">
+            <div className="relative flex h-[281px] w-full flex-col gap-2.5 bg-[url('/game-background.jpg')] bg-bottom bg-cover">
               <div className="flex-col">
                 <GameHeader
                   keyword={gameInfo?.keyword || ''}
@@ -187,13 +187,13 @@ const Page = ({ params }: { params: { id: string } }) => {
               </div>
               {/* <GameScore score={0} nickname={'itsmo'} isCorrect={true} /> */}
               {status === 'highlight' && (
-                <>
+                <div className="absolute bottom-0 left-0 w-full">
                   <GameLyric lyric={highlight.lyric} />
                   <GameTrack
                     title={highlight.title}
                     artist={highlight.artist}
                   />
-                </>
+                </div>
               )}
               {status === 'idle' && <GameIntro />}
               {status === 'correct' && (
