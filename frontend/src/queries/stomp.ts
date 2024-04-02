@@ -30,7 +30,7 @@ export default function useStompQuery<DATA, ERROR>(
       queryClient.setQueryData(queryKey, nextData);
     });
 
-    setSubscriber(queryKey.toString(), true);
+    // setSubscriber(queryKey.toString(), true);
     isSubscribedRef.current = true;
 
     return () => {
