@@ -1,30 +1,41 @@
-import type { ProfileProps } from '@/types/profile';
+import type { DecorationKeys, FaceKeys } from '@/types/avatar';
+import type { GameRoomMember } from '@/types/game';
 import GameProfile from './GameProfile';
 
-export default function GameProfileList({ items }: { items: ProfileProps[] }) {
-  if (items.length < 6) {
-    for (let i = 0; i < 6 - items.length; i++) {
+export default function GameProfileList({
+  position,
+  items,
+}: { position: string; items: GameRoomMember[] }) {
+  if (items.length < 3) {
+    for (let i = 0; i < 3 - items.length; i++) {
       items.push({
-        nickname: '',
-        score: 0,
-        avatar: {
-          faceType: 'default',
+        member: {
+          memberId: '',
+          nickname: '',
           decoType: 'default',
+          faceType: 'default',
+          decoColor: '#ffffff',
           skinColor: '#ffffff',
-          decoColor: 'black',
         },
+        score: 0,
       });
     }
   }
 
-  const profiles = [items.slice(0, 3), items.slice(3, 6)];
   return (
-    <div>
-      {profiles[0].map((profile, index) => (
+    <div className="flex h-full grow flex-col justify-between">
+      {items.map((profile, index) => (
         <GameProfile
-          key={`${profile.nickname}-${index}`}
-          avatar={profile.avatar}
-          nickname={profile.nickname}
+          key={`${position}-${
+            profile.member.nickname === '' ? 'empty' : profile.member.nickname
+          }-${index}`}
+          avatar={{
+            faceType: profile.member.faceType as keyof typeof FaceKeys,
+            decoType: profile.member.decoType as keyof typeof DecorationKeys,
+            skinColor: profile.member.skinColor,
+            decoColor: profile.member.decoColor,
+          }}
+          nickname={profile.member.nickname}
           score={profile.score}
         />
       ))}

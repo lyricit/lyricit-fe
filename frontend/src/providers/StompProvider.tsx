@@ -1,26 +1,27 @@
 'use client';
 
 import { useUserStore } from '@/stores/user';
-import { Client } from '@stomp/stompjs';
+import { Client, type StompSubscription } from '@stomp/stompjs';
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { useMap } from 'react-use';
 
 const StompContext = createContext<StompClient>({
   client: undefined,
   setSubscriber: () => {},
-  getSubscriber: () => false,
+  getSubscriber: () => null,
 });
 
 interface StompClient {
   client?: Client;
-  setSubscriber: <K extends string>(key: K, value: boolean) => void;
-  getSubscriber: <K extends string>(key: K) => boolean;
+  setSubscriber: <K extends string>(key: K, value: StompSubscription) => void;
+  getSubscriber: <K extends string>(key: K) => StompSubscription | null;
 }
 
 export const StompProvider = ({ children }: { children: React.ReactNode }) => {
   const [isConnected, setIsConnected] = useState(false);
   const id = useUserStore((state) => state.id);
-  const [subscribers, { set, get }] = useMap<Record<string, boolean>>();
+  const [subscribers, { set, get }] =
+    useMap<Record<string, StompSubscription>>();
 
   const client = useMemo(
     () =>

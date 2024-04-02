@@ -3,41 +3,30 @@
 import EmptyRoomProfile from '@/components/profile/room/EmptyRoomProfile';
 import RoomProfile from '@/components/profile/room/RoomProfile';
 import RoomHeader from '@/components/room/RoomHeader';
-import { useStompClient } from '@/providers/StompProvider';
+import RoomReadyButton from '@/components/room/RoomReadyButton';
+import RoomStartButton from '@/components/room/RoomStartButton';
+import { useGameActions } from '@/providers/GameProvider';
+import { useStompClient, useSubscriber } from '@/providers/StompProvider';
 import { useRoomActions, useRoomStore } from '@/stores/room';
 import { useUserStore } from '@/stores/user';
-import {
-  type QueryFilters,
-  useQuery,
-  useQueryClient,
-} from '@tanstack/react-query';
+import type { GameInfo, GameRoomInfo, GameRoomMember } from '@/types/game';
+import type { RoomMember } from '@/types/room';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import type { RoomInfoType } from '../../lobby/page';
 
 type RoomInfo = {
-  roomNumber?: string;
-  name?: string;
-  roundLimit?: number;
-  roundTime?: number;
-  isPublic?: boolean;
-  leaderId?: string;
-};
-
-export type MemberType = {
-  member: {
-    memberId: string;
-    nickname: string;
-    decoType: string;
-    faceType: string;
-    decoColor: string;
-    skinColor: string;
-  };
-  isReady: boolean;
+  roomNumber: string;
+  name: string;
+  roundLimit: number;
+  roundTime: number;
+  isPublic: boolean;
+  leaderId: string;
 };
 
 type RoomDetail = RoomInfo & {
-  members: Array<MemberType>;
+  members: Array<RoomMember>;
 };
 
 type RoomChat = {
@@ -50,6 +39,7 @@ type RoomChat = {
 const Page = ({ params }: { params: { id: string } }) => {
   const router = useRouter();
   const { client } = useStompClient();
+  const subscriber = useSubscriber();
   const userStore = useUserStore((state) => state);
   const queryClient = useQueryClient();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -57,19 +47,27 @@ const Page = ({ params }: { params: { id: string } }) => {
   const [isEntered, setIsEntered] = useState(false);
   const storedPassword = useRoomStore((state) => state.password);
   const { invalidate } = useRoomActions;
+  const [isReady, setIsReady] = useState(false);
+  const gameAction = useGameActions();
 
   const { data: room } = useQuery<RoomInfo>({
     queryKey: ['/sub/rooms', 'INFO', params.id],
     queryFn: () =>
-      queryClient.getQueryData<RoomInfo>(['/sub/rooms', 'INFO', params.id]) ||
-      {},
+      queryClient.getQueryData<RoomInfo>(['/sub/rooms', 'INFO', params.id]) || {
+        roomNumber: '999',
+        name: '가나다라마바사아자차카타파하',
+        roundLimit: 9,
+        roundTime: 999,
+        isPublic: true,
+        leaderId: '',
+      },
     enabled: !!client,
   });
 
-  const { data: members } = useQuery<MemberType[]>({
+  const { data: members } = useQuery<RoomMember[]>({
     queryKey: ['/sub/rooms', 'MEMBERS', params.id],
     queryFn: () =>
-      queryClient.getQueryData<MemberType[]>([
+      queryClient.getQueryData<RoomMember[]>([
         '/sub/rooms',
         'MEMBERS',
         params.id,
@@ -84,6 +82,10 @@ const Page = ({ params }: { params: { id: string } }) => {
       [],
     enabled: !!client,
   });
+
+  const isAllReady = useMemo(() => {
+    return members?.every((member) => member.isReady);
+  }, [members]);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
@@ -100,6 +102,7 @@ const Page = ({ params }: { params: { id: string } }) => {
       if (!response.ok) {
         alert('방 정보를 불러오는데 실패했습니다.');
         router.push('/lobby');
+        return;
       }
 
       const roomInfo: RoomInfoType = await response.json();
@@ -142,7 +145,11 @@ const Page = ({ params }: { params: { id: string } }) => {
         },
       );
 
-      queryClient.setQueryData<MemberType[]>(
+      if (roomDetail.leaderId === userStore.id) {
+        setIsReady(true);
+      }
+
+      queryClient.setQueryData<RoomMember[]>(
         ['/sub/rooms', 'MEMBERS', params.id],
         () => {
           return roomDetail.members;
@@ -154,15 +161,20 @@ const Page = ({ params }: { params: { id: string } }) => {
     setIsEntered(true);
   }, [params.id, userStore]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     if (!client.connected || !isEntered) return;
 
     const sub = client.subscribe(`/sub/rooms/${params.id}`, (message) => {
       const { type, data: payload } = JSON.parse(message.body);
 
+      console.log(`MESSAGE RECEIVED: ${type}`);
+      console.log(payload);
+      console.log('-------------------------');
+
       switch (type) {
         case 'MEMBER_IN':
-          queryClient.setQueryData<MemberType[]>(
+          queryClient.setQueryData<RoomMember[]>(
             ['/sub/rooms', 'MEMBERS', params.id],
             (prev) => {
               return [...(prev ?? []), payload];
@@ -170,7 +182,7 @@ const Page = ({ params }: { params: { id: string } }) => {
           );
           break;
         case 'MEMBER_OUT':
-          queryClient.setQueryData<MemberType[]>(
+          queryClient.setQueryData<RoomMember[]>(
             ['/sub/rooms', 'MEMBERS', params.id],
             (prev) => {
               return (prev ?? []).filter(
@@ -180,11 +192,14 @@ const Page = ({ params }: { params: { id: string } }) => {
           );
           break;
         case 'MEMBER_READY':
-          queryClient.setQueryData<MemberType[]>(
+          queryClient.setQueryData<RoomMember[]>(
             ['/sub/rooms', 'MEMBERS', params.id],
             (prev) => {
               return (prev ?? []).map((member) => {
                 if (member.member.memberId === payload) {
+                  if (member.member.memberId === userStore.id) {
+                    setIsReady(!isReady);
+                  }
                   return { ...member, isReady: !member.isReady };
                 }
                 return member;
@@ -205,29 +220,91 @@ const Page = ({ params }: { params: { id: string } }) => {
           queryClient.setQueryData<RoomInfo>(
             ['/sub/rooms', 'INFO', params.id],
             (prev) => {
-              return { ...prev, leaderId: payload };
+              return { ...(prev as RoomInfo), leaderId: payload };
             },
           );
           // 리더 준비 상태 변경
-          queryClient.setQueryData<MemberType[]>(
+          queryClient.setQueryData<RoomMember[]>(
             ['/sub/rooms', 'MEMBERS', params.id],
             (prev) => {
               return (prev ?? []).map((member) => {
                 if (member.member.memberId === payload) {
-                  return { ...member, isReady: false };
+                  return { ...member, isReady: true };
                 }
                 return member;
               });
             },
           );
           break;
+        case 'GAME_STARTED':
+          setGameRoomData();
+          router.push(`/game/${params.id}`);
+          break;
+        case 'ROUND_STARTED':
+          gameAction.setStatus('idle');
+          queryClient.setQueryData<GameInfo>(
+            ['/sub/rooms', 'GAME_INFO', params.id],
+            () => {
+              return payload;
+            },
+          );
+          gameAction.timer.handleStart();
+          break;
+        case 'ROUND_ENDED':
+          gameAction.setStatus('idle');
+          gameAction.timer.handleReset();
+          gameAction.highlight.resetHighlight();
+          break;
+        case 'GAME_MESSAGE':
+          queryClient.setQueryData<RoomChat[]>(
+            ['/sub/rooms', 'GAME_CHAT', params.id],
+            (prev) => {
+              return [...(prev ?? []), payload];
+            },
+          );
+          break;
+        case 'HIGHLIGHT':
+          gameAction.setStatus('highlight');
+          gameAction.highlight.init(payload.timeLimit);
+          gameAction.highlight.setTarget(payload.memberId);
+          gameAction.highlight.setLyric(payload.lyric);
+          gameAction.highlight.setTimeLimit(payload.timeLimit);
+          gameAction.highlight.handleStart();
+          break;
+        case 'HIGHLIGHT_CANCELLED':
+          gameAction.setStatus('idle');
+          gameAction.highlight.resetHighlight();
+          break;
+        case 'HIGHLIGHT_TITLE':
+          gameAction.highlight.setTitle(payload);
+          break;
+        case 'HIGHLIGHT_ARTIST':
+          gameAction.highlight.setArtist(payload);
+          break;
+        case 'CORRECT_ANSWER':
+          gameAction.setStatus('correct');
+          gameAction.speaker.handleSpeaker({
+            ...payload.member,
+            score: payload.totalScore,
+          });
+          gameAction.history.addHistory({
+            title: payload.answerTitle,
+            artist: payload.answerArtist,
+          });
+          gameAction.setScore(payload.score);
+          break;
+        case 'INCORRECT_ANSWER':
+          gameAction.setStatus('incorrect');
+          gameAction.setScore(0);
+          gameAction.speaker.handleSpeaker({ ...payload });
+          break;
       }
     });
 
+    subscriber.setSubscriber('room', sub);
+
     return () => {
-      if (sub) {
-        sub.unsubscribe();
-      }
+      console.log('moving out');
       queryClient.resetQueries({ queryKey: ['/sub/rooms', 'INFO', params.id] });
       queryClient.resetQueries({ queryKey: ['/sub/rooms', 'CHAT', params.id] });
       queryClient.resetQueries({
@@ -260,6 +337,63 @@ const Page = ({ params }: { params: { id: string } }) => {
       alert('준비 상태를 변경하는데 실패했습니다.');
       return;
     }
+  };
+
+  const handleStart = async () => {
+    if (!isAllReady) {
+      alert('모든 유저가 준비 상태여야 시작할 수 있습니다.');
+      return;
+    }
+
+    const response = await fetch(
+      `https://api-dev.lyricit.site/v1/rooms/${params.id}/start`,
+      {
+        method: 'POST',
+        headers: {
+          memberId: userStore.id,
+        },
+      },
+    );
+
+    if (!response.ok) {
+      console.log(response.text());
+      alert('게임을 시작하는데 실패했습니다.');
+      return;
+    }
+
+    setGameRoomData();
+    router.push(`/game/${params.id}`);
+  };
+
+  const setGameRoomData = () => {
+    console.log('setting game data..');
+    console.log(room);
+    console.log(members);
+
+    queryClient.setQueryData<GameRoomInfo>(
+      ['/sub/rooms', 'GAME_ROOM_INFO', params.id],
+      () => queryClient.getQueryData(['/sub/rooms', 'INFO', params.id]),
+    );
+
+    queryClient.setQueryData<GameRoomMember[]>(
+      ['/sub/rooms', 'GAME_MEMBERS', params.id],
+      () => {
+        const roomMembers = queryClient.getQueryData<RoomMember[]>([
+          '/sub/rooms',
+          'MEMBERS',
+          params.id,
+        ]);
+
+        return roomMembers?.map(({ isReady, ...member }) => ({
+          ...member,
+          score: 0,
+        }));
+      },
+    );
+
+    queryClient.resetQueries({
+      queryKey: ['/sub/rooms', 'GAME_CHAT', params.id],
+    });
   };
 
   const handleChat = (event: React.MouseEvent) => {
@@ -298,9 +432,12 @@ const Page = ({ params }: { params: { id: string } }) => {
     );
 
     if (!response.ok) {
+      console.log(response);
       alert('히히 못가');
       return;
     }
+
+    subscriber.getSubscriber('room')?.unsubscribe();
 
     router.push('/lobby');
   };
@@ -370,13 +507,14 @@ const Page = ({ params }: { params: { id: string } }) => {
           </form>
         </section>
         <div className="flex h-full w-[180px] flex-col items-start justify-center gap-5">
-          <button
-            onClick={handleReady}
-            type="button"
-            className="w-full flex-grow rounded-[10px] bg-white font-bold text-3xl"
-          >
-            READY
-          </button>
+          {userStore.id === room?.leaderId ? (
+            <RoomStartButton
+              onClick={handleStart}
+              isReady={isAllReady ?? false}
+            />
+          ) : (
+            <RoomReadyButton onClick={handleReady} isReady={isReady ?? false} />
+          )}
           <button
             onClick={handleOut}
             type="button"
