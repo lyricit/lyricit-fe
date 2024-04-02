@@ -25,6 +25,7 @@ export const Default: Story = {
           skinColor: '#ff00f0',
         },
         score: 16200,
+        isHighlighted: false,
       },
       {
         member: {
@@ -36,6 +37,7 @@ export const Default: Story = {
           skinColor: '#ff2546',
         },
         score: 22400,
+        isHighlighted: false,
       },
     ],
   },

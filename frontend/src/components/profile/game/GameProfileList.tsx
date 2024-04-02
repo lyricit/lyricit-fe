@@ -6,25 +6,26 @@ export default function GameProfileList({
   position,
   items,
 }: { position: string; items: GameRoomMember[] }) {
-  if (items.length < 3) {
-    for (let i = 0; i < 3 - items.length; i++) {
-      items.push({
-        member: {
-          memberId: '',
-          nickname: '',
-          decoType: 'default',
-          faceType: 'default',
-          decoColor: '#ffffff',
-          skinColor: '#ffffff',
-        },
-        score: 0,
-      });
-    }
-  }
+  const defaultProfile = {
+    member: {
+      memberId: '',
+      nickname: '',
+      decoType: 'default',
+      faceType: 'default',
+      decoColor: '#ffffff',
+      skinColor: '#ffffff',
+    },
+    score: 0,
+    isHighlighted: false,
+  };
+
+  const filledItems = items.concat(
+    Array(3 - items.length).fill(defaultProfile),
+  );
 
   return (
     <div className="flex h-full grow flex-col justify-between">
-      {items.map((profile, index) => (
+      {filledItems.map((profile, index) => (
         <GameProfile
           key={`${position}-${
             profile.member.nickname === '' ? 'empty' : profile.member.nickname
@@ -37,6 +38,7 @@ export default function GameProfileList({
           }}
           nickname={profile.member.nickname}
           score={profile.score}
+          isHighlighted={profile.isHighlighted}
         />
       ))}
     </div>

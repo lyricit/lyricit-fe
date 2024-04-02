@@ -2,7 +2,7 @@ import type { AvatarType } from '../avatar';
 import type { TimerActions, TimerStates } from '../timer';
 
 export type GameActions = {
-  setStatus: (state: 'idle' | 'highlight' | 'correct' | 'incorrect') => void;
+  setStatus: (state: GameStatus) => void;
   timer: TimerActions;
   highlight: TimerActions & {
     setTarget: (id: string) => void;
@@ -20,11 +20,15 @@ export type GameActions = {
     addHistory: (history: { title: string; artist: string }) => void;
     clearHistory: () => void;
   };
+  result: {
+    setResult: (result: GameResult[]) => void;
+    clearResult: () => void;
+  };
   setScore: (score: number) => void;
 };
 
 export type GameStates = {
-  status: 'idle' | 'highlight' | 'correct' | 'incorrect';
+  status: GameStatus;
   timer: TimerStates;
   highlight: TimerStates & {
     target: string;
@@ -35,6 +39,15 @@ export type GameStates = {
   };
   speaker: SpeakerType;
   history: GameHistory[];
+  score: number;
+  result: GameResult[];
+};
+
+export type GameStatus = 'idle' | 'highlight' | 'correct' | 'incorrect' | 'end';
+
+export type GameResult = {
+  memberId: string;
+  nickname: string;
   score: number;
 };
 
@@ -67,6 +80,7 @@ export type GameRoomMember = {
     skinColor: string;
   };
   score: number;
+  isHighlighted: boolean;
 };
 
 export type GameInfo = {
