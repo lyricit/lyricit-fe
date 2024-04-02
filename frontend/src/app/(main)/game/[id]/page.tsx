@@ -214,7 +214,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                 <GameResultModal
                   results={result}
                   onClick={() => {
-                    router.push('/lobby');
+                    router.push(`/room/${params.id}`);
                   }}
                 />
               )}
