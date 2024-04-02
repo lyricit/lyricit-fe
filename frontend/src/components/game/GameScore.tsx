@@ -1,5 +1,6 @@
 'use client';
 
+import type { AvatarType } from '@/types/avatar';
 import { cn } from '@/utils';
 import { Exo } from 'next/font/google';
 import { Avatar } from '../avatar';
@@ -12,8 +13,14 @@ const exo = Exo({
 export default function GameScore({
   score,
   nickname,
+  avatar,
   isCorrect,
-}: { score: number; nickname: string; isCorrect: boolean }) {
+}: {
+  score: number;
+  nickname: string;
+  avatar: AvatarType;
+  isCorrect: boolean;
+}) {
   return (
     <section
       className={cn(
@@ -28,7 +35,12 @@ export default function GameScore({
         )}
       >
         <div className="z-10 flex flex-col items-center justify-center">
-          <Avatar />
+          <Avatar
+            skinColor={avatar.skinColor}
+            decoColor={avatar.decoColor}
+            faceType={avatar.faceType}
+            decoType={avatar.decoType}
+          />
           {/* <span className="font-semibold text-base text-white">{nickname}</span> */}
           <div className="relative z-10">
             <span className="z-10 font-kotra text-white text-xl">

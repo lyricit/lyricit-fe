@@ -198,6 +198,12 @@ const Page = ({ params }: { params: { id: string } }) => {
               {status === 'idle' && <GameIntro />}
               {status === 'correct' && (
                 <GameScore
+                  avatar={{
+                    decoColor: speaker.decoColor,
+                    decoType: speaker.decoType,
+                    faceType: speaker.faceType,
+                    skinColor: speaker.skinColor,
+                  }}
                   score={score}
                   nickname={speaker.nickname}
                   isCorrect
@@ -205,6 +211,12 @@ const Page = ({ params }: { params: { id: string } }) => {
               )}
               {status === 'incorrect' && (
                 <GameScore
+                  avatar={{
+                    decoColor: speaker.decoColor,
+                    decoType: speaker.decoType,
+                    faceType: speaker.faceType,
+                    skinColor: speaker.skinColor,
+                  }}
                   score={score}
                   nickname={speaker.nickname}
                   isCorrect={false}
