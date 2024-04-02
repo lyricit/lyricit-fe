@@ -4,7 +4,9 @@ import useTimer from '@/hooks/useTimer';
 import type {
   GameActions,
   GameHistory,
+  GameResult,
   GameStates,
+  GameStatus,
   SpeakerType,
 } from '@/types/game';
 import type React from 'react';
@@ -36,6 +38,7 @@ const GameStatesContext = createContext<GameStates>({
   },
   score: 0,
   history: [],
+  result: [],
 });
 
 const GameActionsContext = createContext<GameActions>({
@@ -66,6 +69,10 @@ const GameActionsContext = createContext<GameActions>({
     addHistory: () => {},
     clearHistory: () => {},
   },
+  result: {
+    setResult: () => {},
+    clearResult: () => {},
+  },
   setScore: () => {},
 });
 
@@ -75,9 +82,7 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
   const [target, setTarget] = useState<string>('');
   const [lyric, setLyric] = useState<string>('');
   const [timeLimit, setTimeLimit] = useState<number>(0);
-  const [status, setStatus] = useState<
-    'idle' | 'highlight' | 'correct' | 'incorrect'
-  >('idle');
+  const [status, setStatus] = useState<GameStatus>('idle');
   const initialSpeakerState = useMemo<SpeakerType>(
     () => ({
       memberId: '',
@@ -95,6 +100,7 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
   const [title, setTitle] = useState<string>('');
   const [artist, setArtist] = useState<string>('');
   const [score, setScore] = useState<number>(0);
+  const [result, setResult] = useState<GameResult[]>([]);
 
   const states = useMemo(
     () => ({
@@ -114,6 +120,7 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
       },
       speaker: speaker,
       history: history,
+      result: result,
       score: score,
     }),
     [
@@ -130,13 +137,13 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
       title,
       artist,
       score,
+      result,
     ],
   );
 
   const actions = useMemo(
     () => ({
-      setStatus: (state: 'idle' | 'highlight' | 'correct' | 'incorrect') =>
-        setStatus(state),
+      setStatus: (state: GameStatus) => setStatus(state),
       timer: {
         handleStart: timer.handleStart,
         handlePause: timer.handlePause,
@@ -177,6 +184,10 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
         addHistory: (history: { title: string; artist: string }) =>
           setHistory((prev) => [...prev, history]),
         clearHistory: () => setHistory([]),
+      },
+      result: {
+        setResult: (result: GameResult[]) => setResult(result),
+        clearResult: () => setResult([]),
       },
       setScore: (score: number) => setScore(score),
     }),

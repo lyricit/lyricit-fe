@@ -9,6 +9,7 @@ import GameTrack from '@/components/game/GameTrack';
 import GameProfile from '@/components/profile/game/GameProfile';
 import GameProfileList from '@/components/profile/game/GameProfileList';
 import GameRound from '@/components/profile/game/GameRound';
+import GameResultModal from '@/containers/modal/GameResultModal';
 import { useGameActions, useGameStates } from '@/providers/GameProvider';
 import { useStompClient } from '@/providers/StompProvider';
 import { useUserStore } from '@/stores/user';
@@ -23,6 +24,7 @@ import {
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useRef } from 'react';
 
 const Page = ({ params }: { params: { id: string } }) => {
@@ -31,8 +33,10 @@ const Page = ({ params }: { params: { id: string } }) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const chatRef = useRef<HTMLDivElement>(null);
   const userStore = useUserStore((state) => state);
-  const { status, timer, highlight, speaker, score, history } = useGameStates();
+  const { status, timer, highlight, speaker, score, history, result } =
+    useGameStates();
   const { timer: timerAction } = useGameActions();
+  const router = useRouter();
 
   const headerTime = useMemo(() => {
     return highlight.isRunning ? highlight.leftTime : timer.leftTime;
@@ -204,6 +208,14 @@ const Page = ({ params }: { params: { id: string } }) => {
                   score={score}
                   nickname={speaker.nickname}
                   isCorrect={false}
+                />
+              )}
+              {status === 'end' && (
+                <GameResultModal
+                  results={result}
+                  onClick={() => {
+                    router.push('/lobby');
+                  }}
                 />
               )}
             </div>

@@ -5,7 +5,7 @@ import RoomProfile from '@/components/profile/room/RoomProfile';
 import RoomHeader from '@/components/room/RoomHeader';
 import RoomReadyButton from '@/components/room/RoomReadyButton';
 import RoomStartButton from '@/components/room/RoomStartButton';
-import { useGameActions } from '@/providers/GameProvider';
+import { useGameActions, useGameStates } from '@/providers/GameProvider';
 import { useStompClient, useSubscriber } from '@/providers/StompProvider';
 import { useRoomActions, useRoomStore } from '@/stores/room';
 import { useUserStore } from '@/stores/user';
@@ -49,6 +49,7 @@ const Page = ({ params }: { params: { id: string } }) => {
   const { invalidate } = useRoomActions;
   const [isReady, setIsReady] = useState(false);
   const gameAction = useGameActions();
+  const { highlight } = useGameStates();
 
   const { data: room } = useQuery<RoomInfo>({
     queryKey: ['/sub/rooms', 'INFO', params.id],
@@ -190,6 +191,14 @@ const Page = ({ params }: { params: { id: string } }) => {
               );
             },
           );
+          queryClient.setQueryData<GameRoomMember[]>(
+            ['/sub/rooms', 'GAME_MEMBERS', params.id],
+            (prev) => {
+              return (prev ?? []).filter(
+                (member) => member.member.memberId !== payload.member.memberId,
+              );
+            },
+          );
           break;
         case 'MEMBER_READY':
           queryClient.setQueryData<RoomMember[]>(
@@ -238,6 +247,11 @@ const Page = ({ params }: { params: { id: string } }) => {
           break;
         case 'GAME_STARTED':
           setGameRoomData();
+          gameAction.setStatus('idle');
+          gameAction.highlight.resetHighlight();
+          gameAction.history.clearHistory();
+          gameAction.result.clearResult();
+          gameAction.timer.handleReset();
           router.push(`/game/${params.id}`);
           break;
         case 'ROUND_STARTED':
@@ -264,6 +278,20 @@ const Page = ({ params }: { params: { id: string } }) => {
           );
           break;
         case 'HIGHLIGHT':
+          queryClient.setQueryData<GameRoomMember[]>(
+            ['/sub/rooms', 'GAME_MEMBERS', params.id],
+            (prev) => {
+              return (prev ?? []).map((member) => {
+                if (member.member.memberId === payload.memberId) {
+                  return {
+                    ...member,
+                    isHighlighted: true,
+                  };
+                }
+                return member;
+              });
+            },
+          );
           gameAction.setStatus('highlight');
           gameAction.highlight.init(payload.timeLimit);
           gameAction.highlight.setTarget(payload.memberId);
@@ -272,6 +300,18 @@ const Page = ({ params }: { params: { id: string } }) => {
           gameAction.highlight.handleStart();
           break;
         case 'HIGHLIGHT_CANCELLED':
+          queryClient.setQueryData<GameRoomMember[]>(
+            ['/sub/rooms', 'GAME_MEMBERS', params.id],
+            (prev) => {
+              console.log(`reset Highlight ${highlight.target}`);
+              return (prev ?? []).map((member) => {
+                return {
+                  ...member,
+                  isHighlighted: false,
+                };
+              });
+            },
+          );
           gameAction.setStatus('idle');
           gameAction.highlight.resetHighlight();
           break;
@@ -292,11 +332,29 @@ const Page = ({ params }: { params: { id: string } }) => {
             artist: payload.answerArtist,
           });
           gameAction.setScore(payload.score);
+          queryClient.setQueryData<GameRoomMember[]>(
+            ['/sub/rooms', 'GAME_MEMBERS', params.id],
+            (prev) => {
+              return (prev ?? []).map((member) => {
+                if (member.member.memberId === payload.member.memberId) {
+                  return {
+                    ...member,
+                    score: payload.totalScore,
+                  };
+                }
+                return member;
+              });
+            },
+          );
           break;
         case 'INCORRECT_ANSWER':
           gameAction.setStatus('incorrect');
           gameAction.setScore(0);
           gameAction.speaker.handleSpeaker({ ...payload });
+          break;
+        case 'GAME_ENDED':
+          gameAction.setStatus('end');
+          gameAction.result.setResult(payload);
           break;
       }
     });
@@ -387,6 +445,7 @@ const Page = ({ params }: { params: { id: string } }) => {
         return roomMembers?.map(({ isReady, ...member }) => ({
           ...member,
           score: 0,
+          isHighlighted: false,
         }));
       },
     );
