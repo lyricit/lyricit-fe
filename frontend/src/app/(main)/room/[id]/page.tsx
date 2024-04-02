@@ -166,200 +166,204 @@ const Page = ({ params }: { params: { id: string } }) => {
   useEffect(() => {
     if (!client.connected || !isEntered) return;
 
-    const sub = client.subscribe(`/sub/rooms/${params.id}`, (message) => {
-      const { type, data: payload } = JSON.parse(message.body);
+    if (!subscriber.getSubscriber('room')) {
+      const sub = client.subscribe(`/sub/rooms/${params.id}`, (message) => {
+        const { type, data: payload } = JSON.parse(message.body);
 
-      console.log(`MESSAGE RECEIVED: ${type}`);
-      console.log(payload);
-      console.log('-------------------------');
+        console.log(`MESSAGE RECEIVED: ${type}`);
+        console.log(payload);
+        console.log('-------------------------');
 
-      switch (type) {
-        case 'MEMBER_IN':
-          queryClient.setQueryData<RoomMember[]>(
-            ['/sub/rooms', 'MEMBERS', params.id],
-            (prev) => {
-              return [...(prev ?? []), payload];
-            },
-          );
-          break;
-        case 'MEMBER_OUT':
-          queryClient.setQueryData<RoomMember[]>(
-            ['/sub/rooms', 'MEMBERS', params.id],
-            (prev) => {
-              return (prev ?? []).filter(
-                (member) => member.member.memberId !== payload.member.memberId,
-              );
-            },
-          );
-          queryClient.setQueryData<GameRoomMember[]>(
-            ['/sub/rooms', 'GAME_MEMBERS', params.id],
-            (prev) => {
-              return (prev ?? []).filter(
-                (member) => member.member.memberId !== payload.member.memberId,
-              );
-            },
-          );
-          break;
-        case 'MEMBER_READY':
-          queryClient.setQueryData<RoomMember[]>(
-            ['/sub/rooms', 'MEMBERS', params.id],
-            (prev) => {
-              return (prev ?? []).map((member) => {
-                if (member.member.memberId === payload) {
-                  if (member.member.memberId === userStore.id) {
-                    setIsReady(!isReady);
+        switch (type) {
+          case 'MEMBER_IN':
+            queryClient.setQueryData<RoomMember[]>(
+              ['/sub/rooms', 'MEMBERS', params.id],
+              (prev) => {
+                return [...(prev ?? []), payload];
+              },
+            );
+            break;
+          case 'MEMBER_OUT':
+            queryClient.setQueryData<RoomMember[]>(
+              ['/sub/rooms', 'MEMBERS', params.id],
+              (prev) => {
+                return (prev ?? []).filter(
+                  (member) =>
+                    member.member.memberId !== payload.member.memberId,
+                );
+              },
+            );
+            queryClient.setQueryData<GameRoomMember[]>(
+              ['/sub/rooms', 'GAME_MEMBERS', params.id],
+              (prev) => {
+                return (prev ?? []).filter(
+                  (member) =>
+                    member.member.memberId !== payload.member.memberId,
+                );
+              },
+            );
+            break;
+          case 'MEMBER_READY':
+            queryClient.setQueryData<RoomMember[]>(
+              ['/sub/rooms', 'MEMBERS', params.id],
+              (prev) => {
+                return (prev ?? []).map((member) => {
+                  if (member.member.memberId === payload) {
+                    if (member.member.memberId === userStore.id) {
+                      setIsReady(!isReady);
+                    }
+                    return { ...member, isReady: !member.isReady };
                   }
-                  return { ...member, isReady: !member.isReady };
-                }
-                return member;
-              });
-            },
-          );
-          break;
-        case 'ROOM_MESSAGE':
-          queryClient.setQueryData<RoomChat[]>(
-            ['/sub/rooms', 'CHAT', params.id],
-            (prev) => {
-              return [...(prev ?? []), payload];
-            },
-          );
-          break;
-        case 'LEADER_CHANGED':
-          // 리더 변경
-          queryClient.setQueryData<RoomInfo>(
-            ['/sub/rooms', 'INFO', params.id],
-            (prev) => {
-              return { ...(prev as RoomInfo), leaderId: payload };
-            },
-          );
-          // 리더 준비 상태 변경
-          queryClient.setQueryData<RoomMember[]>(
-            ['/sub/rooms', 'MEMBERS', params.id],
-            (prev) => {
-              return (prev ?? []).map((member) => {
-                if (member.member.memberId === payload) {
-                  return { ...member, isReady: true };
-                }
-                return member;
-              });
-            },
-          );
-          break;
-        case 'GAME_STARTED':
-          setGameRoomData();
-          gameAction.setStatus('idle');
-          gameAction.highlight.resetHighlight();
-          gameAction.history.clearHistory();
-          gameAction.result.clearResult();
-          gameAction.timer.handleReset();
-          router.push(`/game/${params.id}`);
-          break;
-        case 'ROUND_STARTED':
-          gameAction.setStatus('idle');
-          queryClient.setQueryData<GameInfo>(
-            ['/sub/rooms', 'GAME_INFO', params.id],
-            () => {
-              return payload;
-            },
-          );
-          gameAction.timer.handleStart();
-          break;
-        case 'ROUND_ENDED':
-          gameAction.setStatus('idle');
-          gameAction.timer.handleReset();
-          gameAction.highlight.resetHighlight();
-          break;
-        case 'GAME_MESSAGE':
-          queryClient.setQueryData<RoomChat[]>(
-            ['/sub/rooms', 'GAME_CHAT', params.id],
-            (prev) => {
-              return [...(prev ?? []), payload];
-            },
-          );
-          break;
-        case 'HIGHLIGHT':
-          queryClient.setQueryData<GameRoomMember[]>(
-            ['/sub/rooms', 'GAME_MEMBERS', params.id],
-            (prev) => {
-              return (prev ?? []).map((member) => {
-                if (member.member.memberId === payload.memberId) {
+                  return member;
+                });
+              },
+            );
+            break;
+          case 'ROOM_MESSAGE':
+            queryClient.setQueryData<RoomChat[]>(
+              ['/sub/rooms', 'CHAT', params.id],
+              (prev) => {
+                return [...(prev ?? []), payload];
+              },
+            );
+            break;
+          case 'LEADER_CHANGED':
+            // 리더 변경
+            queryClient.setQueryData<RoomInfo>(
+              ['/sub/rooms', 'INFO', params.id],
+              (prev) => {
+                return { ...(prev as RoomInfo), leaderId: payload };
+              },
+            );
+            // 리더 준비 상태 변경
+            queryClient.setQueryData<RoomMember[]>(
+              ['/sub/rooms', 'MEMBERS', params.id],
+              (prev) => {
+                return (prev ?? []).map((member) => {
+                  if (member.member.memberId === payload) {
+                    return { ...member, isReady: true };
+                  }
+                  return member;
+                });
+              },
+            );
+            break;
+          case 'GAME_STARTED':
+            setGameRoomData();
+            gameAction.setStatus('idle');
+            gameAction.highlight.resetHighlight();
+            gameAction.history.clearHistory();
+            gameAction.result.clearResult();
+            gameAction.timer.handleReset();
+            router.push(`/game/${params.id}`);
+            break;
+          case 'ROUND_STARTED':
+            gameAction.setStatus('idle');
+            queryClient.setQueryData<GameInfo>(
+              ['/sub/rooms', 'GAME_INFO', params.id],
+              () => {
+                return payload;
+              },
+            );
+            gameAction.timer.handleStart();
+            break;
+          case 'ROUND_ENDED':
+            gameAction.setStatus('idle');
+            gameAction.timer.handleReset();
+            gameAction.highlight.resetHighlight();
+            break;
+          case 'GAME_MESSAGE':
+            queryClient.setQueryData<RoomChat[]>(
+              ['/sub/rooms', 'GAME_CHAT', params.id],
+              (prev) => {
+                return [...(prev ?? []), payload];
+              },
+            );
+            break;
+          case 'HIGHLIGHT':
+            queryClient.setQueryData<GameRoomMember[]>(
+              ['/sub/rooms', 'GAME_MEMBERS', params.id],
+              (prev) => {
+                return (prev ?? []).map((member) => {
+                  if (member.member.memberId === payload.memberId) {
+                    return {
+                      ...member,
+                      isHighlighted: true,
+                    };
+                  }
+                  return member;
+                });
+              },
+            );
+            gameAction.setStatus('highlight');
+            gameAction.highlight.init(payload.timeLimit);
+            gameAction.highlight.setTarget(payload.memberId);
+            gameAction.highlight.setLyric(payload.lyric);
+            gameAction.highlight.setTimeLimit(payload.timeLimit);
+            gameAction.highlight.handleStart();
+            break;
+          case 'HIGHLIGHT_CANCELLED':
+            queryClient.setQueryData<GameRoomMember[]>(
+              ['/sub/rooms', 'GAME_MEMBERS', params.id],
+              (prev) => {
+                console.log(`reset Highlight ${highlight.target}`);
+                return (prev ?? []).map((member) => {
                   return {
                     ...member,
-                    isHighlighted: true,
+                    isHighlighted: false,
                   };
-                }
-                return member;
-              });
-            },
-          );
-          gameAction.setStatus('highlight');
-          gameAction.highlight.init(payload.timeLimit);
-          gameAction.highlight.setTarget(payload.memberId);
-          gameAction.highlight.setLyric(payload.lyric);
-          gameAction.highlight.setTimeLimit(payload.timeLimit);
-          gameAction.highlight.handleStart();
-          break;
-        case 'HIGHLIGHT_CANCELLED':
-          queryClient.setQueryData<GameRoomMember[]>(
-            ['/sub/rooms', 'GAME_MEMBERS', params.id],
-            (prev) => {
-              console.log(`reset Highlight ${highlight.target}`);
-              return (prev ?? []).map((member) => {
-                return {
-                  ...member,
-                  isHighlighted: false,
-                };
-              });
-            },
-          );
-          gameAction.setStatus('idle');
-          gameAction.highlight.resetHighlight();
-          break;
-        case 'HIGHLIGHT_TITLE':
-          gameAction.highlight.setTitle(payload);
-          break;
-        case 'HIGHLIGHT_ARTIST':
-          gameAction.highlight.setArtist(payload);
-          break;
-        case 'CORRECT_ANSWER':
-          gameAction.setStatus('correct');
-          gameAction.speaker.handleSpeaker({
-            ...payload.member,
-            score: payload.totalScore,
-          });
-          gameAction.history.addHistory({
-            title: payload.answerTitle,
-            artist: payload.answerArtist,
-          });
-          gameAction.setScore(payload.score);
-          queryClient.setQueryData<GameRoomMember[]>(
-            ['/sub/rooms', 'GAME_MEMBERS', params.id],
-            (prev) => {
-              return (prev ?? []).map((member) => {
-                if (member.member.memberId === payload.member.memberId) {
-                  return {
-                    ...member,
-                    score: payload.totalScore,
-                  };
-                }
-                return member;
-              });
-            },
-          );
-          break;
-        case 'INCORRECT_ANSWER':
-          gameAction.setStatus('incorrect');
-          gameAction.setScore(0);
-          gameAction.speaker.handleSpeaker({ ...payload });
-          break;
-        case 'GAME_ENDED':
-          gameAction.setStatus('end');
-          gameAction.result.setResult(payload);
-          break;
-      }
-    });
+                });
+              },
+            );
+            gameAction.setStatus('idle');
+            gameAction.highlight.resetHighlight();
+            break;
+          case 'HIGHLIGHT_TITLE':
+            gameAction.highlight.setTitle(payload);
+            break;
+          case 'HIGHLIGHT_ARTIST':
+            gameAction.highlight.setArtist(payload);
+            break;
+          case 'CORRECT_ANSWER':
+            gameAction.setStatus('correct');
+            gameAction.speaker.handleSpeaker({
+              ...payload.member,
+              score: payload.totalScore,
+            });
+            gameAction.history.addHistory({
+              title: payload.answerTitle,
+              artist: payload.answerArtist,
+            });
+            gameAction.setScore(payload.score);
+            queryClient.setQueryData<GameRoomMember[]>(
+              ['/sub/rooms', 'GAME_MEMBERS', params.id],
+              (prev) => {
+                return (prev ?? []).map((member) => {
+                  if (member.member.memberId === payload.member.memberId) {
+                    return {
+                      ...member,
+                      score: payload.totalScore,
+                    };
+                  }
+                  return member;
+                });
+              },
+            );
+            break;
+          case 'INCORRECT_ANSWER':
+            gameAction.setStatus('incorrect');
+            gameAction.setScore(0);
+            gameAction.speaker.handleSpeaker({ ...payload });
+            break;
+          case 'GAME_ENDED':
+            gameAction.setStatus('end');
+            gameAction.result.setResult(payload);
+            break;
+        }
+      });
 
-    subscriber.setSubscriber('room', sub);
+      subscriber.setSubscriber('room', sub);
+    }
 
     return () => {
       console.log('moving out');
@@ -497,6 +501,7 @@ const Page = ({ params }: { params: { id: string } }) => {
     }
 
     subscriber.getSubscriber('room')?.unsubscribe();
+    subscriber.removeSubscriber('room');
 
     router.push('/lobby');
   };

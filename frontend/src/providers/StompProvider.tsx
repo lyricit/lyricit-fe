@@ -9,18 +9,20 @@ const StompContext = createContext<StompClient>({
   client: undefined,
   setSubscriber: () => {},
   getSubscriber: () => null,
+  removeSubscriber: () => {},
 });
 
 interface StompClient {
   client?: Client;
   setSubscriber: <K extends string>(key: K, value: StompSubscription) => void;
   getSubscriber: <K extends string>(key: K) => StompSubscription | null;
+  removeSubscriber: <K extends string>(key: K) => void;
 }
 
 export const StompProvider = ({ children }: { children: React.ReactNode }) => {
   const [isConnected, setIsConnected] = useState(false);
   const id = useUserStore((state) => state.id);
-  const [subscribers, { set, get }] =
+  const [subscribers, { set, get, remove }] =
     useMap<Record<string, StompSubscription>>();
 
   const client = useMemo(
@@ -58,7 +60,12 @@ export const StompProvider = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <StompContext.Provider
-      value={{ client, setSubscriber: set, getSubscriber: get }}
+      value={{
+        client,
+        setSubscriber: set,
+        getSubscriber: get,
+        removeSubscriber: remove,
+      }}
     >
       {children}
     </StompContext.Provider>
@@ -75,11 +82,16 @@ export const useStompClient = () => {
 };
 
 export const useSubscriber = () => {
-  const { getSubscriber, setSubscriber } = useContext(StompContext);
+  const { getSubscriber, setSubscriber, removeSubscriber } =
+    useContext(StompContext);
 
-  if (getSubscriber === undefined || setSubscriber === undefined) {
+  if (
+    getSubscriber === undefined ||
+    setSubscriber === undefined ||
+    removeSubscriber === undefined
+  ) {
     throw new Error('useSubscriber must be used within a StompProvider');
   }
 
-  return { getSubscriber, setSubscriber };
+  return { getSubscriber, setSubscriber, removeSubscriber };
 };

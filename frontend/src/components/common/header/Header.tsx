@@ -16,6 +16,7 @@ const Header = () => {
         return;
       }
       subscriber.getSubscriber('room')?.unsubscribe();
+      subscriber.removeSubscriber('room');
     }
   };
 
