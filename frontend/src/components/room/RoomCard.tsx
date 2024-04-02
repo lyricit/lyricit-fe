@@ -33,7 +33,7 @@ export default function RoomCard({
         >
           <div
             className={cn(
-              'inline-flex w-[75px] flex-col items-center justify-center gap-2.5 self-stretch rounded-l-md',
+              'relative inline-flex w-[75px] flex-col items-center justify-center gap-2.5 self-stretch rounded-l-md',
               status === 'waiting' ? 'bg-emerald-500' : 'bg-rose-600',
             )}
           >
