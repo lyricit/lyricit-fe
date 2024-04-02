@@ -10,6 +10,9 @@ const config: Config = {
     './src/containers/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
+    dropShadow: {
+      '3xl': '0 0 15px rgba(0, 223, 162, 1)',
+    },
     colors: {
       inherit: 'inherit',
       transparent: 'transparent',

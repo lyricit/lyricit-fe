@@ -4,4 +4,5 @@ export type ProfileProps = {
   avatar: AvatarType;
   nickname: string;
   score: number;
+  isHighlighted?: boolean;
 };
