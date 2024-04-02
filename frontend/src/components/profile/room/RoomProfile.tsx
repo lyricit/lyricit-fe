@@ -1,12 +1,12 @@
-import type { MemberType } from '@/app/(main)/room/[id]/page';
 import { Avatar } from '@/components/avatar';
 import type { DecorationKeys, FaceKeys } from '@/types/avatar';
+import type { RoomMember } from '@/types/room';
 import Nickname from '../Nickname';
 
 const RoomProfile = ({
   info,
   isMaster,
-}: { info: MemberType; isMaster: boolean }) => {
+}: { info: RoomMember; isMaster: boolean }) => {
   return (
     <section className="relative inline-flex h-[200px] w-[180px] flex-col items-center justify-start overflow-clip rounded-[10px] border-2 border-black bg-white pt-2">
       <Nickname nickname={info.member.nickname} />
