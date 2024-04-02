@@ -1,10 +1,21 @@
 import { Avatar } from '@/components/avatar';
 import type { ProfileProps } from '@/types/profile';
 import Score from './Score';
+import { cn } from '@/utils';
 
-const GameProfile = ({ avatar, nickname, score }: ProfileProps) => {
+const GameProfile = ({
+  avatar,
+  nickname,
+  score,
+  isHighlighted,
+}: ProfileProps) => {
   return (
-    <div className="flex h-[130px] w-[265px] items-center justify-evenly rounded-[10px] border-2 border-black bg-white">
+    <div
+      className={cn(
+        'flex h-[130px] w-[265px] items-center justify-evenly rounded-[10px] border-2 border-black bg-white',
+        isHighlighted && 'border-emerald-500 drop-shadow-3xl',
+      )}
+    >
       <div>
         {nickname === '' ? null : (
           <Avatar

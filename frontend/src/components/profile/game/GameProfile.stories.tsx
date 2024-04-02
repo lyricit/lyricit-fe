@@ -13,6 +13,7 @@ export default {
     nickname: { control: 'text' },
     score: { control: 'number' },
     avatar: { control: 'object' },
+    isHighlighted: { control: 'boolean' },
   },
 } as Meta;
 
@@ -28,6 +29,7 @@ export const Default: Story = {
       skinColor: '#ffffff',
       decoColor: 'black',
     },
+    isHighlighted: false,
   },
 };
 
@@ -41,5 +43,20 @@ export const Empty: Story = {
       skinColor: '#ffffff',
       decoColor: 'black',
     },
+    isHighlighted: false,
+  },
+};
+
+export const Highlighted: Story = {
+  args: {
+    nickname: '일이삼사오육칠팔구십',
+    score: 99999,
+    avatar: {
+      faceType: 'default',
+      decoType: 'default',
+      skinColor: '#ffffff',
+      decoColor: 'black',
+    },
+    isHighlighted: true,
   },
 };
