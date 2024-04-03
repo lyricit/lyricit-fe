@@ -16,15 +16,19 @@ export default function RoomCard({
   onClick,
 }: RoomProps & { onClick?: MouseEventHandler }) {
   return (
-    <div>
+    <>
       {status === 'empty' ? (
-        <div className="inline-flex h-20 w-[360px] items-start justify-start overflow-clip rounded-[10px] border-2 border-neutral-200 bg-white">
+        <div
+          style={{ transform: 'scale(0.98) translateZ(0px);' }}
+          className="inline-flex h-20 w-[360px] items-start justify-start overflow-clip rounded-[10px] border-2 border-neutral-200 bg-white"
+        >
           <div className="inline-flex w-[75px] flex-col items-center justify-center gap-2.5 self-stretch rounded-1-md bg-neutral-200" />
         </div>
       ) : (
         <motion.div
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 1 }}
+          initial={{ scale: 0.98 }}
+          whileHover={{ scale: 1.0 }}
+          whileTap={{ scale: 0.98 }}
           className={cn(
             'inline-flex h-20 w-[360px] cursor-pointer items-start justify-start rounded-[10px] border-2 bg-white',
             status === 'waiting' ? 'border-emerald-500' : 'border-rose-600',
@@ -74,6 +78,6 @@ export default function RoomCard({
           </div>
         </motion.div>
       )}
-    </div>
+    </>
   );
 }

@@ -34,7 +34,7 @@ export default function RoomCardList({
   }, [roomList]);
 
   return (
-    <div className="flex h-[385px] w-[755px] flex-wrap items-center justify-between gap-2 overflow-y-auto">
+    <div className="flex h-[385px] w-[755px] flex-wrap items-center justify-between gap-2 overflow-y-scroll">
       {roomList.map(
         ({ id, title, status, isOpen, current, limit }: RoomProps, index) => (
           <div
