@@ -121,9 +121,9 @@
 
 ## 🏠 Service Layout
 
-| ![Main Page](./assets/landing-page.webp) | ![Lobby](./assets/service/2.jpg) |
-| :--------------------------------------: | :------------------------------: |
-|                Main Page                 |              Lobby               |
+| ![Main Page](./assets/landing-page.webp) | <image src="./assets/service/2.jpg" width='800' alt="Lobby"> |
+| :--------------------------------------: | :----------------------------------------------------------: |
+|                Main Page                 |                            Lobby                             |
 
 | ![Room](./assets/service/3.jpg) | ![Game](./assets/service/4.jpg) |
 | :-----------------------------: | :-----------------------------: |
