@@ -121,15 +121,15 @@
 
 ## 🏠 Service Layout
 
-| ![Main Page](./assets/landing-page.avifs) | ![Lobby](./assets/service/2.jpg) |
-| :---------------------------------------: | :------------------------------: |
-|                 Main Page                 |              Lobby               |
+| <image src="./assets/landing-page.webp" alt="Main Page" width="1970"> | ![Lobby](./assets/service/2.jpg) |
+| :-------------------------------------------------------------------: | :------------------------------: |
+|                               Main Page                               |              Lobby               |
 
 | ![Room](./assets/service/3.jpg) | ![Game](./assets/service/4.jpg) |
 | :-----------------------------: | :-----------------------------: |
 |              Room               |              Game               |
 
-| ![Correct Answer](./assets/service/6.jpg) | ![Wrong Answer](./assets/service/7.jpg) |
+| ![Correct Answer](./assets/service/6.jpg) | ![Wrong Answer](./assets/service/5.jpg) |
 | :---------------------------------------: | :-------------------------------------: |
 |              Correct Answer               |              Wrong Answer               |
 
