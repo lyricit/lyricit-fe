@@ -16,6 +16,7 @@ export default function GameIntro() {
             입력하세요!
           </p>
           <p className="font-semibold">제한 시간이 지나면 라운드가 종료돼요.</p>
+          <p className="font-semibold">띄어쓰기 포함 8자 이상 입력하세요!</p>
         </div>
       </section>
     </section>
