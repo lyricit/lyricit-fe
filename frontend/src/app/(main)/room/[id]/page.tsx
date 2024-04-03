@@ -512,7 +512,7 @@ const Page = ({ params }: { params: { id: string } }) => {
   }, [chats]);
 
   return (
-    <div className="flex w-full flex-col items-center justify-center gap-5 py-5">
+    <div className="flex h-full w-full flex-col items-center justify-between gap-5 py-5">
       <div className="flex w-full items-center justify-center">
         <RoomHeader
           roundLimit={room?.roundLimit || 0}
@@ -540,12 +540,12 @@ const Page = ({ params }: { params: { id: string } }) => {
           />
         ))}
       </div>
-      <div className="flex h-60 w-full items-start justify-start gap-5 px-10">
+      <div className="flex w-full flex-shrink items-start justify-start gap-5 px-10">
         {/* 채팅 컴포넌트 */}
-        <section className="inline-flex h-full w-[920px] flex-col items-center justify-start overflow-clip rounded-[10px] bg-white pb-2.5">
+        <section className="flex h-[230px] w-[920px] flex-col items-center justify-start overflow-clip rounded-[10px] bg-white p-5">
           <div
             ref={chatRef}
-            className="inline-flex h-full w-full select-text flex-col overflow-auto px-2.5"
+            className="h-full w-full select-text flex-col overflow-y-scroll"
           >
             {chats?.map((chat, index) => (
               <div key={`${chat.nickname}${index}`} className="block">
@@ -554,7 +554,7 @@ const Page = ({ params }: { params: { id: string } }) => {
               </div>
             ))}
           </div>
-          <form className="inline-flex h-[30px] w-[900px] items-center justify-center overflow-clip rounded-[5px] border border-neutral-500 bg-white">
+          <form className="inline-flex h-[30px] w-full items-center justify-center overflow-clip rounded-[5px] border border-neutral-500 bg-white">
             <input
               ref={inputRef}
               type="text"
@@ -570,7 +570,7 @@ const Page = ({ params }: { params: { id: string } }) => {
             </button>
           </form>
         </section>
-        <div className="flex h-full w-[180px] flex-col items-start justify-center gap-5">
+        <div className="flex h-full w-[180px] flex-col items-start justify-between gap-5">
           {userStore.id === room?.leaderId ? (
             <RoomStartButton
               onClick={handleStart}
@@ -582,7 +582,7 @@ const Page = ({ params }: { params: { id: string } }) => {
           <button
             onClick={handleOut}
             type="button"
-            className="h-10 w-full rounded-[10px] border-2 border-black border-opacity-20 bg-neutral-300 font-semibold"
+            className="h-1/3 w-full rounded-[10px] border-2 border-black border-opacity-20 bg-neutral-300 font-semibold"
           >
             나가기
           </button>
