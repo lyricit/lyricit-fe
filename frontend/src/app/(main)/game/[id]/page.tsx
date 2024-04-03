@@ -11,7 +11,7 @@ import GameProfileList from '@/components/profile/game/GameProfileList';
 import GameRound from '@/components/profile/game/GameRound';
 import GameResultModal from '@/containers/modal/GameResultModal';
 import { useGameActions, useGameStates } from '@/providers/GameProvider';
-import { useStompClient } from '@/providers/StompProvider';
+import { useStompClient, useSubscriber } from '@/providers/StompProvider';
 import { useUserStore } from '@/stores/user';
 import type {
   GameChat,
@@ -37,6 +37,7 @@ const Page = ({ params }: { params: { id: string } }) => {
     useGameStates();
   const { timer: timerAction } = useGameActions();
   const router = useRouter();
+  const subscriber = useSubscriber();
 
   const headerTime = useMemo(() => {
     return highlight.isRunning ? highlight.leftTime : timer.leftTime;
@@ -139,6 +140,25 @@ const Page = ({ params }: { params: { id: string } }) => {
   useEffect(() => {
     chatRef.current?.lastElementChild?.scrollIntoView();
   }, [chats]);
+
+  const handleOut = () => {
+    const res = confirm('정말로 나가시겠습니까? 다시 입장하실 수 없습니다.');
+
+    if (!res) {
+      return;
+    }
+
+    const sub = subscriber.getSubscriber('room');
+
+    if (sub) {
+      sub.unsubscribe();
+      subscriber.removeSubscriber('room');
+      router.push('/lobby');
+      return;
+    }
+
+    alert('오류가 발생했습니다. 다시 시도해주세요.');
+  };
 
   return (
     <div className="flex w-full items-center justify-between px-10 py-5">
@@ -265,6 +285,7 @@ const Page = ({ params }: { params: { id: string } }) => {
       <div className="flex h-full flex-col items-center justify-center gap-5">
         <button
           type="button"
+          onClick={handleOut}
           className="flex h-20 w-full items-center justify-center rounded-[10px] bg-neutral-300 font-semibold text-2xl hover:bg-pink-400 hover:text-white"
         >
           나가기
